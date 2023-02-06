@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:matchdotdog/pages/dog.dart';
 import 'package:matchdotdog/pages/login.dart';
 import '../models/validators.dart';
 import '../models/fire_auth.dart';
@@ -123,13 +124,14 @@ class _RegisterUserState extends State<RegisterUser> {
                                     });
 
                                     if (user != null) {
-                                      print('User successfully registered!');
-                                      // Navigator.of(context).pushReplacement(
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) =>
-                                      //         ProfilePage(user: user),
-                                      //   ),
-                                      // );
+                                      print(
+                                          'Sending user information to dog registration page!');
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              RegisterDog(user: user),
+                                        ),
+                                      );
                                     }
                                   }
                                 }

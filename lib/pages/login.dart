@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:matchdotdog/pages/dog.dart';
 import 'package:matchdotdog/pages/register.dart';
 import '../models/fire_auth.dart';
 import '../models/validators.dart';
@@ -86,13 +87,13 @@ class _LoginPageState extends State<LoginPage> {
                                       if (user != null) {
                                         print(
                                             "User is successfully logged in!");
-                                        // Navigator.of(context).pushReplacement(
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => ProfilePage(
-                                        //       user: user,
-                                        //     ),
-                                        //   ),
-                                        // );
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) => RegisterDog(
+                                              user: user,
+                                            ),
+                                          ),
+                                        );
                                       }
                                     }
                                   },
