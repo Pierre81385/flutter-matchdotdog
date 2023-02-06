@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:matchdotdog/pages/register.dart';
+import 'package:matchdotdog/auth/login.dart';
+import 'package:matchdotdog/auth/register.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(body: RegisterUser()),
+      home: LoginPage(),
     );
   }
 }

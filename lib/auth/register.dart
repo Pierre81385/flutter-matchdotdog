@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:matchdotdog/pages/dog.dart';
-import 'package:matchdotdog/pages/login.dart';
-import '../models/validators.dart';
-import '../models/fire_auth.dart';
+import 'package:matchdotdog/dogs/dog.dart';
+import 'package:matchdotdog/auth/login.dart';
+import './fire_auth.dart';
+import './validators.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({super.key});

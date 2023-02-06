@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:matchdotdog/pages/dog.dart';
-import 'package:matchdotdog/pages/register.dart';
-import '../models/fire_auth.dart';
-import '../models/validators.dart';
+import 'package:matchdotdog/dogs/dog.dart';
+import 'package:matchdotdog/auth/register.dart';
+import './fire_auth.dart';
+import './validators.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:matchdotdog/pages/login.dart';
-import '../models/validators.dart';
-import '../models/fire_auth.dart';
+import 'package:matchdotdog/auth/login.dart';
+import '../auth/validators.dart';
+import '../auth/fire_auth.dart';
 
 class RegisterDog extends StatefulWidget {
   const RegisterDog({required this.user});
@@ -84,10 +84,10 @@ class _RegisterDogState extends State<RegisterDog> {
                                     //save dog to FireStore
                                     firestoreInstance
                                         .collection("dogs")
-                                        .doc(_currentUser.uid)
+                                        .doc()
                                         .set({
                                       "name": _nameTextController.text,
-                                      "owner": _currentUser.displayName
+                                      "owner": _currentUser.uid
                                     });
 
                                     setState(() {
@@ -99,7 +99,7 @@ class _RegisterDogState extends State<RegisterDog> {
                                     firestoreInstance
                                         .collection("dogs")
                                         .where("owner",
-                                            isEqualTo: _currentUser.displayName)
+                                            isEqualTo: _currentUser.uid)
                                         .get()
                                         .then(
                                           (res) => print(
