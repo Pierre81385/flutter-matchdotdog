@@ -1,0 +1,118 @@
+{
+  "project_info": {
+    "project_number": "358663544884",
+    "project_id": "tinderfordogs-702fe",
+    "storage_bucket": "tinderfordogs-702fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358663544884:android:998a38bf7ae11ff4706a61",
+        "android_client_info": {
+          "package_name": "com.example.lilbuddies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358663544884-47m6e2imi6v21jgalpgq6ujd4q9u559v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsIcc1DsvegWkWyIH8oBKqNF5PUuyeOI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358663544884-47m6e2imi6v21jgalpgq6ujd4q9u559v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "358663544884-2p865vluo9p5qcd38dodil6gcuqrtqh3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lilbuddies"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358663544884:android:ef320ae8de9380b4706a61",
+        "android_client_info": {
+          "package_name": "com.example.matchdotdog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358663544884-47m6e2imi6v21jgalpgq6ujd4q9u559v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsIcc1DsvegWkWyIH8oBKqNF5PUuyeOI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358663544884-47m6e2imi6v21jgalpgq6ujd4q9u559v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "358663544884-2p865vluo9p5qcd38dodil6gcuqrtqh3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lilbuddies"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358663544884:android:5f737c459d2b15ba706a61",
+        "android_client_info": {
+          "package_name": "com.example.tinder_fordogs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358663544884-47m6e2imi6v21jgalpgq6ujd4q9u559v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsIcc1DsvegWkWyIH8oBKqNF5PUuyeOI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358663544884-47m6e2imi6v21jgalpgq6ujd4q9u559v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "358663544884-2p865vluo9p5qcd38dodil6gcuqrtqh3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lilbuddies"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
