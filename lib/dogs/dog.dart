@@ -1,7 +1,9 @@
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:matchdotdog/auth/login.dart';
+import 'package:matchdotdog/dogs/widgets/dog_file_upload.dart';
 import '../auth/validators.dart';
 import '../auth/fire_auth.dart';
 
@@ -21,11 +23,17 @@ class _RegisterDogState extends State<RegisterDog> {
   bool _isProcessing = false;
   final firestoreInstance = FirebaseFirestore.instance;
   late User _currentUser;
+  late String _avatarPhoto;
+  int? _selectedGenderValue = 0;
+  int? _selectedAgeValue = 0;
+  int? _selectedSizeValue = 0;
+  int? _selectedActivityValue = 0;
 
   @override
   void initState() {
-    _currentUser = widget.user;
     super.initState();
+
+    _currentUser = widget.user;
   }
 
   @override
@@ -40,6 +48,13 @@ class _RegisterDogState extends State<RegisterDog> {
           child: SafeArea(
             child: Column(
               children: [
+                DogImageUploads(
+                  onSelect: (value) {
+                    setState(() {
+                      _avatarPhoto = value!;
+                    });
+                  },
+                ),
                 TextFormField(
                   controller: _nameTextController,
                   focusNode: _focusName,
@@ -48,6 +63,150 @@ class _RegisterDogState extends State<RegisterDog> {
                   ),
                   decoration: InputDecoration(hintText: 'Name'),
                 ),
+                //gender drop down
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: DropdownButton(
+                          value: _selectedGenderValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("select gender"),
+                              value: 0,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Male"),
+                              value: 1,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Female"),
+                              value: 2,
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedGenderValue = value;
+                            });
+                          }),
+                    ),
+                    const SizedBox(width: 24.0),
+
+                    //age drop down
+                    Expanded(
+                      child: DropdownButton(
+                          value: _selectedAgeValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("select age"),
+                              value: 0,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("0-2 yrs"),
+                              value: 1,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("2-5 yrs"),
+                              value: 2,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("5-10 yrs"),
+                              value: 3,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("10+ yrs"),
+                              value: 4,
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedAgeValue = value;
+                            });
+                          }),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: DropdownButton(
+                          value: _selectedSizeValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("select size"),
+                              value: 0,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Extra Small"),
+                              value: 1,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Small"),
+                              value: 2,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Medium"),
+                              value: 3,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Large"),
+                              value: 4,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Extra Large"),
+                              value: 5,
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedSizeValue = value;
+                            });
+                          }),
+                    ),
+                    const SizedBox(width: 24.0),
+
+                    //age drop down
+                    Expanded(
+                      child: DropdownButton(
+                          value: _selectedActivityValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("select play style"),
+                              value: 0,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Lounger"),
+                              value: 1,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Kid Gloves"),
+                              value: 2,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Active"),
+                              value: 3,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Agressive"),
+                              value: 4,
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedActivityValue = value;
+                            });
+                          }),
+                    ),
+                  ],
+                ),
+                //size drop down
+
+                //activity level drop down
+
+                //availibility 7 day select
+
+                //range (maybe move this to user)
                 _isProcessing
                     ? const CircularProgressIndicator()
                     : Row(
@@ -121,10 +280,23 @@ class _RegisterDogState extends State<RegisterDog> {
                                 }
                               },
                               child: const Text(
-                                'Register',
+                                'Add',
                               ),
                             ),
                           ),
+                          const SizedBox(width: 24.0),
+                          Expanded(
+                              child: OutlinedButton(
+                            onPressed: () {
+// Navigator.of(context).pushReplacement(
+//                                         MaterialPageRoute(
+//                                           builder: (context) =>
+//                                               ProfilePage(user: user),
+//                                         ),
+//                                       );
+                            },
+                            child: const Text('Finish'),
+                          ))
                         ],
                       )
               ],
