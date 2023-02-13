@@ -23,7 +23,7 @@ class _RegisterDogState extends State<RegisterDog> {
   bool _isProcessing = false;
   final firestoreInstance = FirebaseFirestore.instance;
   late User _currentUser;
-  late String _avatarPhoto;
+  String? _avatarPhoto = 'no photo';
   int? _selectedGenderValue = 0;
   int? _selectedAgeValue = 0;
   int? _selectedSizeValue = 0;
@@ -50,9 +50,7 @@ class _RegisterDogState extends State<RegisterDog> {
               children: [
                 DogImageUploads(
                   onSelect: (value) {
-                    setState(() {
-                      _avatarPhoto = value!;
-                    });
+                    _avatarPhoto = value;
                   },
                 ),
                 TextFormField(
@@ -246,7 +244,12 @@ class _RegisterDogState extends State<RegisterDog> {
                                         .doc()
                                         .set({
                                       "name": _nameTextController.text,
-                                      "owner": _currentUser.uid
+                                      "image": _avatarPhoto,
+                                      "owner": _currentUser.uid,
+                                      "gender": _selectedGenderValue,
+                                      "age": _selectedAgeValue,
+                                      "size": _selectedSizeValue,
+                                      "activity": _selectedActivityValue
                                     });
 
                                     setState(() {
