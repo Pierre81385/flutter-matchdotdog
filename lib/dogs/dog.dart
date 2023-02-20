@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:matchdotdog/auth/login.dart';
+import 'package:matchdotdog/dogs/my_dogs.dart';
 import 'package:matchdotdog/dogs/widgets/dog_file_upload.dart';
 import '../auth/validators.dart';
 import '../auth/fire_auth.dart';
@@ -198,13 +199,7 @@ class _RegisterDogState extends State<RegisterDog> {
                     ),
                   ],
                 ),
-                //size drop down
 
-                //activity level drop down
-
-                //availibility 7 day select
-
-                //range (maybe move this to user)
                 _isProcessing
                     ? const CircularProgressIndicator()
                     : Row(
@@ -291,14 +286,14 @@ class _RegisterDogState extends State<RegisterDog> {
                           Expanded(
                               child: OutlinedButton(
                             onPressed: () {
-// Navigator.of(context).pushReplacement(
-//                                         MaterialPageRoute(
-//                                           builder: (context) =>
-//                                               ProfilePage(user: user),
-//                                         ),
-//                                       );
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      MyDogs(user: _currentUser),
+                                ),
+                              );
                             },
-                            child: const Text('Finish'),
+                            child: const Text('Review'),
                           ))
                         ],
                       )
