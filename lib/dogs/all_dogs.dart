@@ -1,30 +1,31 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:matchdotdog/dogs/my_dogs.dart';
 import 'package:matchdotdog/dogs/register_dog.dart';
+import 'package:flip_card/flip_card.dart';
 import '../ui/size.dart';
 
-import 'all_dogs.dart';
-
-class MyDogs extends StatefulWidget {
+class AllDogs extends StatefulWidget {
   final User user;
-  const MyDogs({required this.user});
+  const AllDogs({required this.user});
 
   @override
-  State<MyDogs> createState() => _MyDogsState();
+  State<AllDogs> createState() => _AllDogsState();
 }
 
-class _MyDogsState extends State<MyDogs> {
+class _AllDogsState extends State<AllDogs> {
   late User _currentUser;
-  late Stream<QuerySnapshot> _myDogsStream;
+  late Stream<QuerySnapshot> _allDogsStream;
 
   @override
   void initState() {
     _currentUser = widget.user;
-    _myDogsStream = FirebaseFirestore.instance
+    _allDogsStream = FirebaseFirestore.instance
         .collection('dogs')
-        .where('owner', isEqualTo: _currentUser.uid)
+        .where('owner', isNotEqualTo: _currentUser.uid)
         .snapshots();
     super.initState();
   }
@@ -32,7 +33,7 @@ class _MyDogsState extends State<MyDogs> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _myDogsStream,
+        stream: _allDogsStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Something went wrong');
