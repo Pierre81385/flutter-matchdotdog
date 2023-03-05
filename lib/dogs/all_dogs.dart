@@ -196,19 +196,38 @@ class _AllDogsState extends State<AllDogs> {
                                               ),
                                               onPressed: () {
                                                 //needs a check to see if this dog has already been liked by user
-                                                firestoreInstance
-                                                    .collection("dogs")
-                                                    .doc(document.id)
-                                                    .update({
-                                                      'liked': FieldValue
-                                                          .arrayUnion([
-                                                        _currentUser.uid
-                                                      ])
-                                                    })
-                                                    .then((value) =>
-                                                        print("Like Added"))
-                                                    .catchError((error) => print(
-                                                        "Failed to add like: $error"));
+                                                if (data['liked']
+                                                    .toString()
+                                                    .contains(
+                                                        _currentUser.uid)) {
+                                                  firestoreInstance
+                                                      .collection("dogs")
+                                                      .doc(document.id)
+                                                      .update({
+                                                        'liked': FieldValue
+                                                            .arrayRemove([
+                                                          _currentUser.uid
+                                                        ])
+                                                      })
+                                                      .then((value) =>
+                                                          print("Like Added"))
+                                                      .catchError((error) => print(
+                                                          "Failed to add like: $error"));
+                                                } else {
+                                                  firestoreInstance
+                                                      .collection("dogs")
+                                                      .doc(document.id)
+                                                      .update({
+                                                        'liked': FieldValue
+                                                            .arrayUnion([
+                                                          _currentUser.uid
+                                                        ])
+                                                      })
+                                                      .then((value) =>
+                                                          print("Like Added"))
+                                                      .catchError((error) => print(
+                                                          "Failed to add like: $error"));
+                                                }
                                               },
                                             ),
                                           ],
