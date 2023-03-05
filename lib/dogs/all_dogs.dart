@@ -10,6 +10,7 @@ import '../ui/size.dart';
 
 class AllDogs extends StatefulWidget {
   final User user;
+
   const AllDogs({required this.user});
 
   @override
@@ -19,6 +20,7 @@ class AllDogs extends StatefulWidget {
 class _AllDogsState extends State<AllDogs> {
   late User _currentUser;
   late Stream<QuerySnapshot> _allDogsStream;
+  final firestoreInstance = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -27,6 +29,7 @@ class _AllDogsState extends State<AllDogs> {
         .collection('dogs')
         .where('owner', isNotEqualTo: _currentUser.uid)
         .snapshots();
+
     super.initState();
   }
 
@@ -67,6 +70,7 @@ class _AllDogsState extends State<AllDogs> {
                             (DocumentSnapshot document) {
                               Map<String, dynamic> data =
                                   document.data()! as Map<String, dynamic>;
+
                               return FlipCard(
                                 flipOnTouch: true,
                                 direction: FlipDirection.VERTICAL,
@@ -95,7 +99,7 @@ class _AllDogsState extends State<AllDogs> {
                                     width: displayWidth(context) - 20,
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
@@ -113,7 +117,7 @@ class _AllDogsState extends State<AllDogs> {
                                                     .pushReplacement(
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        RegisterDog(
+                                                        MyDogs(
                                                             user: _currentUser),
                                                   ),
                                                 );
@@ -138,20 +142,26 @@ class _AllDogsState extends State<AllDogs> {
                                             ),
                                           ],
                                         ),
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          child: Image.network(
-                                            data['image'],
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.fitHeight,
+                                        Container(
+                                          child: Column(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(150),
+                                                child: Image.network(
+                                                  data['image'],
+                                                  width: 250,
+                                                  height: 250,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 25,
+                                              ),
+                                              Text(data['name']),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 25,
-                                        ),
-                                        Text(data['name']),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -160,7 +170,7 @@ class _AllDogsState extends State<AllDogs> {
                                               iconSize: 50,
                                               icon: const Icon(
                                                 color: Colors.black,
-                                                Icons.thumb_down_alt_rounded,
+                                                Icons.location_on,
                                               ),
                                               onPressed: () {
                                                 Navigator.of(context)
@@ -175,19 +185,25 @@ class _AllDogsState extends State<AllDogs> {
                                             ),
                                             IconButton(
                                               iconSize: 50,
+                                              color: Colors.black,
                                               icon: const Icon(
-                                                color: Colors.black,
                                                 Icons.thumb_up_alt_rounded,
                                               ),
                                               onPressed: () {
-                                                Navigator.of(context)
-                                                    .pushReplacement(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        AllDogs(
-                                                            user: _currentUser),
-                                                  ),
-                                                );
+                                                //needs a check to see if this dog has already been liked by user
+                                                firestoreInstance
+                                                    .collection("dogs")
+                                                    .doc(document.id)
+                                                    .update({
+                                                      'liked': FieldValue
+                                                          .arrayUnion([
+                                                        _currentUser.uid
+                                                      ])
+                                                    })
+                                                    .then((value) =>
+                                                        print("Like Added"))
+                                                    .catchError((error) => print(
+                                                        "Failed to add like: $error"));
                                               },
                                             ),
                                           ],

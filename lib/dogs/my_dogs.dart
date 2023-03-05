@@ -73,7 +73,7 @@ class _MyDogsState extends State<MyDogs> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  elevation: 5,
+                                  elevation: 50,
                                   margin: EdgeInsets.all(8),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
@@ -88,13 +88,13 @@ class _MyDogsState extends State<MyDogs> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  elevation: 5,
+                                  elevation: 50,
                                   margin: EdgeInsets.all(8),
                                   child: SizedBox(
                                     width: displayWidth(context) - 20,
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
@@ -137,20 +137,26 @@ class _MyDogsState extends State<MyDogs> {
                                             ),
                                           ],
                                         ),
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          child: Image.network(
-                                            data['image'],
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.fitHeight,
+                                        Container(
+                                          child: Column(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(150),
+                                                child: Image.network(
+                                                  data['image'],
+                                                  width: 250,
+                                                  height: 250,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 25,
+                                              ),
+                                              Text(data['name']),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 25,
-                                        ),
-                                        Text(data['name']),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -159,7 +165,7 @@ class _MyDogsState extends State<MyDogs> {
                                               iconSize: 50,
                                               icon: const Icon(
                                                 color: Colors.black,
-                                                Icons.thumb_down_alt_rounded,
+                                                Icons.edit_rounded,
                                               ),
                                               onPressed: () {
                                                 Navigator.of(context)
@@ -175,9 +181,8 @@ class _MyDogsState extends State<MyDogs> {
                                             IconButton(
                                               iconSize: 50,
                                               icon: const Icon(
-                                                color: Colors.black,
-                                                Icons.thumb_up_alt_rounded,
-                                              ),
+                                                  color: Colors.black,
+                                                  Icons.people_alt_rounded),
                                               onPressed: () {
                                                 Navigator.of(context)
                                                     .pushReplacement(

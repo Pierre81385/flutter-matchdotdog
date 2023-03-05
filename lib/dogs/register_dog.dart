@@ -7,6 +7,7 @@ import 'package:matchdotdog/dogs/my_dogs.dart';
 import 'package:matchdotdog/dogs/widgets/dog_file_upload.dart';
 import '../auth/validators.dart';
 import '../auth/fire_auth.dart';
+import './dog_model.dart';
 
 class RegisterDog extends StatefulWidget {
   const RegisterDog({required this.user});
@@ -33,7 +34,6 @@ class _RegisterDogState extends State<RegisterDog> {
   @override
   void initState() {
     super.initState();
-
     _currentUser = widget.user;
   }
 
