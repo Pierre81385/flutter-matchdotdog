@@ -185,7 +185,12 @@ class _AllDogsState extends State<AllDogs> {
                                             ),
                                             IconButton(
                                               iconSize: 50,
-                                              color: Colors.black,
+                                              color: data['liked']
+                                                      .toString()
+                                                      .contains(
+                                                          _currentUser.uid)
+                                                  ? Colors.red
+                                                  : Colors.black,
                                               icon: const Icon(
                                                 Icons.thumb_up_alt_rounded,
                                               ),
