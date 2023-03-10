@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:matchdotdog/dogs/register_dog.dart';
 import 'package:matchdotdog/auth/register.dart';
 import 'package:matchdotdog/ui/main_background.dart';
+import 'package:matchdotdog/dogs/my_dogs.dart';
 import './fire_auth.dart';
 import './validators.dart';
 
@@ -20,6 +22,9 @@ class _LoginPageState extends State<LoginPage> {
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
   bool _isProcessing = false;
+  final firestoreInstance = FirebaseFirestore.instance;
+  late bool _dogExists;
+  late Stream<QuerySnapshot> _myDogsStream;
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +147,16 @@ class _LoginPageState extends State<LoginPage> {
                                                             .text,
                                                   );
 
+                                                  _myDogsStream =
+                                                      FirebaseFirestore
+                                                          .instance
+                                                          .collection('dogs')
+                                                          .where(
+                                                              'owner',
+                                                              isEqualTo:
+                                                                  user?.uid)
+                                                          .snapshots();
+
                                                   setState(() {
                                                     _isProcessing = false;
                                                   });
@@ -149,15 +164,34 @@ class _LoginPageState extends State<LoginPage> {
                                                   if (user != null) {
                                                     print(
                                                         "User is successfully logged in!");
-                                                    Navigator.of(context)
-                                                        .pushReplacement(
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            RegisterDog(
-                                                          user: user,
-                                                        ),
-                                                      ),
-                                                    );
+
+                                                    if (_myDogsStream != null) {
+                                                      Navigator.of(context)
+                                                          .pushReplacement(
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      MyDogs(
+                                                                          user:
+                                                                              user)));
+                                                    } else {
+                                                      Navigator.of(context)
+                                                          .pushReplacement(
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      RegisterDog(
+                                                                          user:
+                                                                              user)));
+                                                    }
+
+                                                    // Navigator.of(context)
+                                                    //     .pushReplacement(
+                                                    //   MaterialPageRoute(
+                                                    //     builder: (context) =>
+                                                    //         RegisterDog(
+                                                    //       user: user,
+                                                    //     ),
+                                                    //   ),
+                                                    // );
                                                   }
                                                 }
                                               },
