@@ -30,6 +30,9 @@ class _RegisterDogState extends State<RegisterDog> {
   double _selectedAgeValue = 0;
   double _selectedSizeValue = 0;
   double _selectedActivityValue = 0;
+  static const mainColor = Color.fromARGB(255, 94, 168, 172);
+  static const secondaryColor = const Color(0xFFFBF7F4);
+  static const accentColor = Color.fromARGB(255, 242, 202, 25);
 
   @override
   void initState() {
@@ -47,10 +50,10 @@ class _RegisterDogState extends State<RegisterDog> {
           body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white.withOpacity(0.2), width: 1.0),
-          gradient: const LinearGradient(
-            colors: [Colors.amber, Colors.pink],
+        decoration: const BoxDecoration(
+          // border: Border.all(color: Colors.white.withOpacity(0.2), width: 1.0),
+          gradient: LinearGradient(
+            colors: [mainColor, mainColor],
             stops: [0.0, 1.0],
           ),
         ),
@@ -60,10 +63,21 @@ class _RegisterDogState extends State<RegisterDog> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
+              Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  elevation: 10,
+                  margin: const EdgeInsets.all(8),
+                  // decoration: BoxDecoration(
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //           blurRadius: 10.0,
+                  //           spreadRadius: 0.5,
+                  //           offset: Offset(0.0, 0.5)),
+                  //     ],
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(20)),
                   child: Column(
                     children: [
                       const SizedBox(
@@ -78,15 +92,16 @@ class _RegisterDogState extends State<RegisterDog> {
                         height: 10,
                       ),
                       const SizedBox(
-                          width: 270,
-                          child: Text(
-                            "Tell everyone about your dog!",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22),
-                          )),
+                        width: 270,
+                        child: Text(
+                          "Tell everyone about your dog!",
+                          textAlign: TextAlign.center,
+                          // style: TextStyle(
+                          //     color: Colors.black,
+                          //     fontWeight: FontWeight.bold,
+                          //     fontSize: 22),
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Form(
@@ -101,7 +116,7 @@ class _RegisterDogState extends State<RegisterDog> {
                                   validator: (value) => Validator.validateName(
                                     name: value,
                                   ),
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     labelText: 'Name',
                                     fillColor: Colors.white,
                                     icon: Icon(Icons.pets_rounded),
@@ -119,16 +134,25 @@ class _RegisterDogState extends State<RegisterDog> {
                                     value: _selectedGenderValue,
                                     items: const [
                                       DropdownMenuItem(
-                                        child: Text("select gender"),
                                         value: 0,
+                                        child: Text(
+                                          "select gender",
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
                                       DropdownMenuItem(
-                                        child: Text("Male"),
                                         value: 1,
+                                        child: Text(
+                                          "Male",
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
                                       DropdownMenuItem(
-                                        child: Text("Female"),
                                         value: 2,
+                                        child: Text(
+                                          "Female",
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
                                     ],
                                     onChanged: (value) {
@@ -202,7 +226,7 @@ class _RegisterDogState extends State<RegisterDog> {
                                               Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      LoginPage(),
+                                                      const LoginPage(),
                                                 ),
                                               );
                                             },
@@ -211,7 +235,7 @@ class _RegisterDogState extends State<RegisterDog> {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(width: 24.0),
+                                        const SizedBox(width: 48.0),
                                         Expanded(
                                           child: OutlinedButton(
                                             onPressed: () async {
@@ -263,15 +287,15 @@ class _RegisterDogState extends State<RegisterDog> {
                                                             "Error completing: $e"),
                                                       );
 
-                                                  // if (user != null) {
-
-                                                  //   Navigator.of(context).pushReplacement(
-                                                  //     MaterialPageRoute(
-                                                  //       builder: (context) =>
-                                                  //           ProfilePage(user: user),
-                                                  //     ),
-                                                  //   );
-                                                  // }
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          MyDogs(
+                                                              user:
+                                                                  _currentUser),
+                                                    ),
+                                                  );
                                                 }
                                               }
                                             },
@@ -280,7 +304,7 @@ class _RegisterDogState extends State<RegisterDog> {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(width: 24.0),
+                                        const SizedBox(width: 12.0),
                                         Expanded(
                                             child: OutlinedButton(
                                           onPressed: () {
@@ -292,7 +316,7 @@ class _RegisterDogState extends State<RegisterDog> {
                                               ),
                                             );
                                           },
-                                          child: const Text('Review'),
+                                          child: const Text('Skip'),
                                         ))
                                       ],
                                     )
