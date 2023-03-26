@@ -15,10 +15,6 @@ class DogImageUploads extends StatefulWidget {
 }
 
 class _DogImageUploadsState extends State<DogImageUploads> {
-  static const mainColor = Color.fromARGB(255, 94, 168, 172);
-  static const secondaryColor = const Color(0xFFFBF7F4);
-  static const accentColor = Color.fromARGB(255, 242, 202, 25);
-
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
@@ -55,7 +51,7 @@ class _DogImageUploadsState extends State<DogImageUploads> {
     if (_photo == null) return;
     final fileName = basename(_photo!.path);
     final destination = 'files/$fileName';
-    final downloadUrl;
+    final String downloadUrl;
 
     try {
       final ref = firebase_storage.FirebaseStorage.instance
@@ -84,7 +80,7 @@ class _DogImageUploadsState extends State<DogImageUploads> {
             },
             child: CircleAvatar(
               radius: 52,
-              backgroundColor: accentColor,
+              backgroundColor: Theme.of(context).splashColor,
               child: _photo != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(50),
@@ -103,7 +99,7 @@ class _DogImageUploadsState extends State<DogImageUploads> {
                       height: 100,
                       child: Icon(
                         Icons.camera_enhance_rounded,
-                        color: Colors.grey[800],
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
             ),
