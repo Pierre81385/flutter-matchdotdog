@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:matchdotdog/dogs/helpers/test.dart';
+import 'package:matchdotdog/dogs/my_dogs_redirect.dart';
 import 'package:matchdotdog/dogs/register_dog.dart';
 import 'package:matchdotdog/ui/paws.dart';
 import '../ui/size.dart';
@@ -326,7 +326,7 @@ class _MyDogsState extends State<MyDogs> {
                                                                           .pushReplacement(
                                                                         MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              MyDogsSwipeCards(
+                                                                              MyDogsRedirect(
                                                                             user:
                                                                                 _currentUser,
                                                                           ),

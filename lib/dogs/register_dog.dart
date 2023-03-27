@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:matchdotdog/user/login.dart';
 import 'package:matchdotdog/dogs/my_dogs.dart';
-import 'package:matchdotdog/dogs/helpers/dog_file_upload.dart';
+import 'package:matchdotdog/dogs/dog_file_upload.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 import 'package:matchdotdog/ui/paws.dart';
 import '../user/validators.dart';
