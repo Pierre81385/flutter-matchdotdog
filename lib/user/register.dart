@@ -3,14 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:matchdotdog/dogs/register_dog.dart';
-import 'package:matchdotdog/location/location.dart';
 import 'package:matchdotdog/user/login.dart';
-import 'package:matchdotdog/main.dart';
 import 'package:matchdotdog/ui/main_background.dart';
-import 'package:matchdotdog/ui/paws.dart';
 import './fire_auth.dart';
 import './validators.dart';
+import 'package:matchdotdog/location/location.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({super.key});
@@ -25,10 +24,16 @@ class _RegisterUserState extends State<RegisterUser> {
   final _lastNameTextController = TextEditingController();
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
+  final _zipTextController = TextEditingController();
+
   final _focusFirstName = FocusNode();
   final _focusLastName = FocusNode();
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
+  final _focusZip = FocusNode();
+
+  late Position userPosition;
+
   bool _isProcessing = false;
   final firestoreInstance = FirebaseFirestore.instance;
 
@@ -40,6 +45,7 @@ class _RegisterUserState extends State<RegisterUser> {
         _focusLastName.unfocus();
         _focusEmail.unfocus();
         _focusPassword.unfocus();
+        _focusZip.unfocus();
       },
       child: Scaffold(
         body: Stack(
@@ -127,7 +133,6 @@ class _RegisterUserState extends State<RegisterUser> {
                                           icon: Icon(Icons.add)),
                                     ),
                                   ),
-                                  LocationPage(),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
@@ -160,6 +165,10 @@ class _RegisterUserState extends State<RegisterUser> {
                                       ),
                                     ),
                                   ),
+                                  LocationPage(userPosition: (value) {
+                                    userPosition = value;
+                                    print(userPosition);
+                                  }),
                                   const SizedBox(height: 24.0),
                                   _isProcessing
                                       ? const CircularProgressIndicator()
@@ -203,6 +212,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                                     if (_registerFormKey
                                                         .currentState!
                                                         .validate()) {
+                                                      //create user in Firebase Auth
                                                       User? user = await FireAuth
                                                           .registerUsingEmailPassword(
                                                         name:
@@ -214,6 +224,24 @@ class _RegisterUserState extends State<RegisterUser> {
                                                             _passwordTextController
                                                                 .text,
                                                       );
+
+                                                      //create user in Firestore
+                                                      firestoreInstance
+                                                          .collection("users")
+                                                          .doc()
+                                                          .set({
+                                                        "name":
+                                                            _firstNameTextController
+                                                                .text,
+                                                        "email":
+                                                            _emailTextController
+                                                                .text,
+                                                        "auth": user?.uid,
+                                                        "lat": userPosition
+                                                            .latitude,
+                                                        "long": userPosition
+                                                            .longitude,
+                                                      });
 
                                                       setState(() {
                                                         _isProcessing = false;

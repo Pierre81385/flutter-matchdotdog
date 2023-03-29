@@ -38,6 +38,18 @@ class Validator {
     } else if (password.length < 6) {
       return 'Enter a password with length at least 6';
     }
+  }
+
+  static String? validateZip({required String? zip}) {
+    if (zip == null) {
+      return null;
+    }
+
+    if (zip.isEmpty) {
+      return 'Zipcode can\'t be empty';
+    } else if (zip.length > 5) {
+      return '5 digit zipcode please!';
+    }
 
     return null;
   }
