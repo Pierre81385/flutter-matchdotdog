@@ -32,7 +32,7 @@ class _RegisterUserState extends State<RegisterUser> {
   final _focusPassword = FocusNode();
   final _focusZip = FocusNode();
 
-  late Position userPosition;
+  late Position _userPosition;
 
   bool _isProcessing = false;
   bool _locationAuth = false;
@@ -167,13 +167,13 @@ class _RegisterUserState extends State<RegisterUser> {
                                       ),
                                     ),
                                   ),
-                                  LocationPage(userPosition: (value) {
-                                    userPosition = value;
-                                    print(userPosition);
-                                    setState(() {
-                                      _locationAuth = true;
-                                    });
-                                  }),
+                                  // LocationPage(userPosition: (value) {
+                                  //   _userPosition = value;
+                                  //   print(_userPosition);
+                                  //   setState(() {
+                                  //     _locationAuth = true;
+                                  //   });
+                                  // }),
                                   const SizedBox(height: 24.0),
                                   _isProcessing
                                       ? const CircularProgressIndicator()
@@ -201,81 +201,55 @@ class _RegisterUserState extends State<RegisterUser> {
                                             const SizedBox(width: 24.0),
                                             Expanded(
                                               child: OutlinedButton(
-                                                onPressed: _locationAuth
-                                                    ? () async {
-                                                        _focusFirstName
-                                                            .unfocus();
-                                                        _focusLastName
-                                                            .unfocus();
-                                                        _focusEmail.unfocus();
-                                                        _focusPassword
-                                                            .unfocus();
+                                                onPressed: () async {
+                                                  _focusFirstName.unfocus();
+                                                  _focusLastName.unfocus();
+                                                  _focusEmail.unfocus();
+                                                  _focusPassword.unfocus();
 
-                                                        if (_registerFormKey
-                                                            .currentState!
-                                                            .validate()) {
-                                                          setState(() {
-                                                            _isProcessing =
-                                                                true;
-                                                          });
+                                                  if (_registerFormKey
+                                                      .currentState!
+                                                      .validate()) {
+                                                    setState(() {
+                                                      _isProcessing = true;
+                                                    });
 
-                                                          if (_registerFormKey
-                                                              .currentState!
-                                                              .validate()) {
-                                                            //create user in Firebase Auth
-                                                            User? user =
-                                                                await FireAuth
-                                                                    .registerUsingEmailPassword(
-                                                              name:
-                                                                  '${_firstNameTextController.text} ${_lastNameTextController.text}',
-                                                              email:
-                                                                  _emailTextController
-                                                                      .text,
-                                                              password:
-                                                                  _passwordTextController
-                                                                      .text,
-                                                            );
+                                                    if (_registerFormKey
+                                                        .currentState!
+                                                        .validate()) {
+                                                      //create user in Firebase Auth
+                                                      User? user = await FireAuth
+                                                          .registerUsingEmailPassword(
+                                                        name:
+                                                            '${_firstNameTextController.text} ${_lastNameTextController.text}',
+                                                        email:
+                                                            _emailTextController
+                                                                .text,
+                                                        password:
+                                                            _passwordTextController
+                                                                .text,
+                                                      );
 
-                                                            //create user in Firestore
-                                                            firestoreInstance
-                                                                .collection(
-                                                                    "location")
-                                                                .doc()
-                                                                .set({
-                                                              "user": user?.uid,
-                                                              "lat":
-                                                                  userPosition
-                                                                      .latitude,
-                                                              "long":
-                                                                  userPosition
-                                                                      .longitude,
-                                                            });
+                                                      setState(() {
+                                                        _isProcessing = false;
+                                                        _locationAuth = false;
+                                                      });
 
-                                                            setState(() {
-                                                              _isProcessing =
-                                                                  false;
-                                                              _locationAuth =
-                                                                  false;
-                                                            });
-
-                                                            if (user != null) {
-                                                              print(
-                                                                  'Sending user information to dog registration page!');
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pushReplacement(
-                                                                MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      RegisterDog(
-                                                                          user:
-                                                                              user),
-                                                                ),
-                                                              );
-                                                            }
-                                                          }
-                                                        }
+                                                      if (user != null) {
+                                                        print(
+                                                            'Sending user information to dog registration page!');
+                                                        Navigator.of(context)
+                                                            .pushReplacement(
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                RegisterDog(
+                                                                    user: user),
+                                                          ),
+                                                        );
                                                       }
-                                                    : null,
+                                                    }
+                                                  }
+                                                },
                                                 child: const Text(
                                                   'REGISTER',
                                                 ),
