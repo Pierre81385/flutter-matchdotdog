@@ -74,12 +74,6 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(
                             height: 10,
                           ),
-                          // const SizedBox(
-                          //     width: 270,
-                          //     child: Text(
-                          //       "Sign In",
-                          //       textAlign: TextAlign.center,
-                          //     )),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Form(
