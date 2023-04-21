@@ -11,6 +11,8 @@ class Dog {
   double size;
   double activity;
   double age;
+  double lat;
+  double long;
   List<dynamic> liked;
 
   Dog(
@@ -21,6 +23,8 @@ class Dog {
       required this.size,
       required this.activity,
       required this.age,
+      required this.lat,
+      required this.long,
       required this.liked});
 
   Dog.fromJson(QueryDocumentSnapshot<Object?>? json)
@@ -31,6 +35,8 @@ class Dog {
         size = json['size'],
         activity = json['activity'],
         age = json['age'],
+        lat = json['lat'],
+        long = json['long'],
         liked = json['liked'];
 
   // factory Dog.fromDocument(QueryDocumentSnapshot<Object?>? doc) {

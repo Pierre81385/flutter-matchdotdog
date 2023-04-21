@@ -2,25 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:matchdotdog/dogs/my_dogs_gallery.dart';
 import 'package:matchdotdog/dogs/my_dogs_redirect.dart';
 import 'package:matchdotdog/dogs/register_dog.dart';
 import 'package:matchdotdog/ui/paws.dart';
 import '../ui/size.dart';
 
 import 'all_dogs.dart';
+import 'dog_model.dart';
 
-class MyDogs extends StatefulWidget {
+class MyDog extends StatefulWidget {
   final User user;
-  const MyDogs({required this.user});
+  final QueryDocumentSnapshot<Object?>? dog;
+  const MyDog({required this.user, required this.dog});
 
   @override
-  State<MyDogs> createState() => _MyDogsState();
+  State<MyDog> createState() => _MyDogState();
 }
 
-class _MyDogsState extends State<MyDogs> {
+class _MyDogState extends State<MyDog> {
   late User _currentUser;
-  late Stream<QuerySnapshot> _myDogsStream;
-  late Stream<QuerySnapshot> _allDogsStream;
+  late QueryDocumentSnapshot<Object?>? _currentDog;
+  late Stream<QuerySnapshot> _oneDogStream;
+  late Stream<QuerySnapshot> _friendStream;
+  late Position _userPosition;
+
   static const mainColor = Color.fromARGB(255, 94, 168, 172);
   static const secondaryColor = const Color(0xFFFBF7F4);
   static const accentColor = Color.fromARGB(255, 242, 202, 25);
@@ -28,13 +35,15 @@ class _MyDogsState extends State<MyDogs> {
   @override
   void initState() {
     _currentUser = widget.user;
-    _myDogsStream = FirebaseFirestore.instance
+    _currentDog = widget.dog!;
+
+    _oneDogStream = FirebaseFirestore.instance
         .collection('dogs')
-        .where('owner', isEqualTo: _currentUser.uid)
+        .where(FieldPath.documentId, isEqualTo: _currentDog!.id)
         .snapshots();
-    _allDogsStream = FirebaseFirestore.instance
+    _friendStream = FirebaseFirestore.instance
         .collection('dogs')
-        .where('liked', arrayContains: _currentUser.uid)
+        .where('liked', arrayContains: _currentUser.uid + _currentDog!.id)
         .snapshots();
     super.initState();
   }
@@ -42,7 +51,7 @@ class _MyDogsState extends State<MyDogs> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _myDogsStream,
+        stream: _oneDogStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return const Text('Something went wrong');
@@ -135,7 +144,7 @@ class _MyDogsState extends State<MyDogs> {
                                                             8.0),
                                                     child: StreamBuilder<
                                                         QuerySnapshot>(
-                                                      stream: _allDogsStream,
+                                                      stream: _friendStream,
                                                       builder: (BuildContext
                                                               context,
                                                           AsyncSnapshot<
@@ -181,7 +190,7 @@ class _MyDogsState extends State<MyDogs> {
                                                                           .pushReplacement(
                                                                         MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              RegisterDog(user: _currentUser),
+                                                                              MyDogsGallery(user: _currentUser),
                                                                         ),
                                                                       );
                                                                     },
@@ -203,7 +212,7 @@ class _MyDogsState extends State<MyDogs> {
                                                                           .pushReplacement(
                                                                         MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              AllDogs(user: _currentUser),
+                                                                              MyDogsGallery(user: _currentUser),
                                                                         ),
                                                                       );
                                                                     },
@@ -260,11 +269,25 @@ class _MyDogsState extends State<MyDogs> {
                                                                         child:
                                                                             Stack(
                                                                           children: [
-                                                                            Image.network(
-                                                                              snapshot2.data?.docs[index]['image'],
-                                                                              fit: BoxFit.cover,
-                                                                              width: double.infinity,
-                                                                              height: double.infinity,
+                                                                            GestureDetector(
+                                                                              onLongPress: () {
+                                                                                Navigator.of(context).pushReplacement(
+                                                                                  MaterialPageRoute(
+                                                                                    builder: (context) => AllDogs(
+                                                                                      user: _currentUser,
+                                                                                      dog: snapshot2.data?.docs[index],
+                                                                                      oneDog: true,
+                                                                                      myDogId: _currentDog!.id,
+                                                                                    ),
+                                                                                  ),
+                                                                                );
+                                                                              },
+                                                                              child: Image.network(
+                                                                                snapshot2.data?.docs[index]['image'],
+                                                                                fit: BoxFit.cover,
+                                                                                width: double.infinity,
+                                                                                height: double.infinity,
+                                                                              ),
                                                                             ),
                                                                             Positioned(
                                                                               left: 0,
@@ -326,7 +349,7 @@ class _MyDogsState extends State<MyDogs> {
                                                                           .pushReplacement(
                                                                         MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              MyDogsRedirect(
+                                                                              MyDogsGallery(
                                                                             user:
                                                                                 _currentUser,
                                                                           ),
@@ -349,7 +372,14 @@ class _MyDogsState extends State<MyDogs> {
                                                                           .pushReplacement(
                                                                         MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              AllDogs(user: _currentUser),
+                                                                              AllDogs(
+                                                                            user:
+                                                                                _currentUser,
+                                                                            dog:
+                                                                                _currentDog,
+                                                                            oneDog:
+                                                                                false,
+                                                                          ),
                                                                         ),
                                                                       );
                                                                     },

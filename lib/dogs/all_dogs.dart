@@ -1,19 +1,28 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:matchdotdog/dogs/my_dogs.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:matchdotdog/dogs/my_dog.dart';
+import 'package:matchdotdog/dogs/my_dogs_gallery.dart';
 import 'package:matchdotdog/dogs/register_dog.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:matchdotdog/main.dart';
 import '../ui/size.dart';
 import 'dog_model.dart';
 
+//dog object is friend dog.id, but liked needs currentuser.id + user dog.id not friend dog
+
 class AllDogs extends StatefulWidget {
   final User user;
+  final QueryDocumentSnapshot<Object?>? dog;
+  final bool? oneDog;
+  final String? myDogId;
 
-  const AllDogs({required this.user});
+  const AllDogs(
+      {required this.user, required this.dog, this.oneDog, this.myDogId});
 
   @override
   State<AllDogs> createState() => _AllDogsState();
@@ -21,34 +30,70 @@ class AllDogs extends StatefulWidget {
 
 class _AllDogsState extends State<AllDogs> {
   late User _currentUser;
+  late Dog? _currentDog;
   late Stream<QuerySnapshot> _allDogsStream;
+  late Stream<QuerySnapshot> _locationsStream;
+  late Stream<QuerySnapshot> _oneDogStream;
+  late Map<String, dynamic> _dogLocation;
+
   final firestoreInstance = FirebaseFirestore.instance;
   static const mainColor = Color.fromARGB(255, 94, 168, 172);
   static const secondaryColor = const Color(0xFFFBF7F4);
   static const accentColor = Color.fromARGB(255, 242, 202, 25);
 
+  late Position _userPostion;
+  late double _distance;
+  bool _checkedDistance = false;
+
   @override
   void initState() {
     _currentUser = widget.user;
+    _currentDog = Dog.fromJson(widget.dog);
+
     _allDogsStream = FirebaseFirestore.instance
         .collection('dogs')
         .where('owner', isNotEqualTo: _currentUser.uid)
         .snapshots();
 
+    _oneDogStream = FirebaseFirestore.instance
+        .collection('dogs')
+        .where(FieldPath.documentId, isEqualTo: widget.dog?.id)
+        .snapshots();
+
+    _distance = 0;
+
     super.initState();
   }
+
+  // void getDistance(dogLat, dogLong) async {
+  //   _userPostion = await Geolocator.getCurrentPosition();
+
+  //   _distance = await Geolocator.distanceBetween(
+  //     _userPostion.latitude,
+  //     _userPostion.longitude,
+  //     dogLat,
+  //     dogLong,
+  //   );
+
+  //   print('distance: ' + _distance.toString());
+
+  //   setState(() {
+  //     _distance;
+  //     _checkedDistance = true;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _allDogsStream,
+        stream: widget.oneDog == true ? _oneDogStream : _allDogsStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text('Something went wrong');
+            return const Text('Something went wrong');
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
+            return const Text("Loading");
           }
 
           return Scaffold(
@@ -75,9 +120,30 @@ class _AllDogsState extends State<AllDogs> {
                               scrollDirection: Axis.horizontal,
                               children: snapshot.data!.docs.map(
                                 (DocumentSnapshot document) {
-                                  Dog data = document.data()! as Dog;
+                                  Map<String, dynamic> data =
+                                      document.data()! as Map<String, dynamic>;
 
                                   return FlipCard(
+                                    onFlip: () async {
+                                      _userPostion =
+                                          await Geolocator.getCurrentPosition();
+
+                                      _distance =
+                                          await Geolocator.distanceBetween(
+                                        _userPostion.latitude,
+                                        _userPostion.longitude,
+                                        data['lat'],
+                                        data['long'],
+                                      );
+
+                                      print(
+                                          'distance: ' + _distance.toString());
+
+                                      setState(() {
+                                        _distance;
+                                        _checkedDistance = true;
+                                      });
+                                    },
                                     flipOnTouch: true,
                                     direction: FlipDirection.VERTICAL,
                                     front: Card(
@@ -86,11 +152,11 @@ class _AllDogsState extends State<AllDogs> {
                                             BorderRadius.circular(20.0),
                                       ),
                                       elevation: 5,
-                                      margin: EdgeInsets.all(8),
+                                      margin: const EdgeInsets.all(8),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(20),
                                         child: Image.network(
-                                          data.photo,
+                                          data['image'],
                                           width: displayWidth(context) * .95,
                                           fit: BoxFit.fitHeight,
                                         ),
@@ -102,7 +168,7 @@ class _AllDogsState extends State<AllDogs> {
                                             BorderRadius.circular(20.0),
                                       ),
                                       elevation: 10,
-                                      margin: EdgeInsets.all(8),
+                                      margin: const EdgeInsets.all(8),
                                       child: SizedBox(
                                         width: displayWidth(context) * .95,
                                         child: Column(
@@ -129,12 +195,16 @@ class _AllDogsState extends State<AllDogs> {
                                                                 .arrow_back_ios_new_rounded,
                                                           ),
                                                           onPressed: () {
+                                                            setState(() {
+                                                              _checkedDistance =
+                                                                  false;
+                                                            });
                                                             Navigator.of(
                                                                     context)
                                                                 .pushReplacement(
                                                               MaterialPageRoute(
                                                                 builder: (context) =>
-                                                                    MyDogs(
+                                                                    MyDogsGallery(
                                                                         user:
                                                                             _currentUser),
                                                               ),
@@ -149,14 +219,20 @@ class _AllDogsState extends State<AllDogs> {
                                                                 .chat_bubble_rounded,
                                                           ),
                                                           onPressed: () {
+                                                            setState(() {
+                                                              _checkedDistance =
+                                                                  false;
+                                                            });
                                                             Navigator.of(
                                                                     context)
                                                                 .pushReplacement(
                                                               MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    AllDogs(
-                                                                        user:
-                                                                            _currentUser),
+                                                                builder: (context) => AllDogs(
+                                                                    user:
+                                                                        _currentUser,
+                                                                    dog: _currentDog
+                                                                        as QueryDocumentSnapshot<
+                                                                            Object?>?),
                                                               ),
                                                             );
                                                           },
@@ -173,16 +249,24 @@ class _AllDogsState extends State<AllDogs> {
                                                                         150),
                                                             child:
                                                                 Image.network(
-                                                              data.photo,
+                                                              data['image'],
                                                               width: 250,
                                                               height: 250,
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             height: 25,
                                                           ),
-                                                          Text(data.name),
+                                                          Text(data['name']),
+                                                          const SizedBox(
+                                                            height: 25,
+                                                          ),
+                                                          Text((_distance /
+                                                                      1609)
+                                                                  .truncate()
+                                                                  .toString() +
+                                                              ' miles away'),
                                                         ],
                                                       ),
                                                     ),
@@ -202,31 +286,37 @@ class _AllDogsState extends State<AllDogs> {
                                                                     context)
                                                                 .pushReplacement(
                                                               MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    AllDogs(
-                                                                        user:
-                                                                            _currentUser),
+                                                                builder: (context) => AllDogs(
+                                                                    user:
+                                                                        _currentUser,
+                                                                    dog: _currentDog
+                                                                        as QueryDocumentSnapshot<
+                                                                            Object?>?),
                                                               ),
                                                             );
                                                           },
                                                         ),
+                                                        ///////////////////////////////////////////////////////////////////////////
                                                         IconButton(
                                                           iconSize: 50,
-                                                          color: data.owner
-                                                                  .contains(
-                                                                      _currentUser
-                                                                          .uid)
+                                                          color: data['liked'].contains(
+                                                                  _currentUser
+                                                                          .uid +
+                                                                      widget
+                                                                          .dog!
+                                                                          .id)
                                                               ? accentColor
                                                               : mainColor,
                                                           icon: const Icon(Icons
                                                               .pets_rounded),
                                                           onPressed: () {
-                                                            //needs a check to see if this dog has already been liked by user
-                                                            if (data.liked
+                                                            //currently widget.dog.id = THIS DOG not users dog
+                                                            if (data['liked']
                                                                 .toString()
-                                                                .contains(
-                                                                    _currentUser
-                                                                        .uid)) {
+                                                                .contains(_currentUser
+                                                                        .uid +
+                                                                    widget.dog!
+                                                                        .id)) {
                                                               firestoreInstance
                                                                   .collection(
                                                                       "dogs")
@@ -237,7 +327,10 @@ class _AllDogsState extends State<AllDogs> {
                                                                         FieldValue
                                                                             .arrayRemove([
                                                                       _currentUser
-                                                                          .uid
+                                                                              .uid +
+                                                                          widget
+                                                                              .dog!
+                                                                              .id
                                                                     ])
                                                                   })
                                                                   .then((value) =>
@@ -258,7 +351,10 @@ class _AllDogsState extends State<AllDogs> {
                                                                         FieldValue
                                                                             .arrayUnion([
                                                                       _currentUser
-                                                                          .uid
+                                                                              .uid +
+                                                                          widget
+                                                                              .dog!
+                                                                              .id
                                                                     ])
                                                                   })
                                                                   .then((value) =>

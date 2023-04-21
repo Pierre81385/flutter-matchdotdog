@@ -2,11 +2,15 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:matchdotdog/user/login.dart';
-import 'package:matchdotdog/dogs/my_dogs.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:matchdotdog/dogs/my_dogs_gallery.dart';
+import 'package:matchdotdog/unused/login.dart';
+import 'package:matchdotdog/dogs/my_dog.dart';
 import 'package:matchdotdog/dogs/dog_file_upload.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 import 'package:matchdotdog/ui/paws.dart';
+import '../unused/location.dart';
+import '../user/login.dart';
 import '../user/validators.dart';
 import '../user/fire_auth.dart';
 import './dog_model.dart';
@@ -32,6 +36,8 @@ class _RegisterDogState extends State<RegisterDog> {
   double _selectedAgeValue = 0;
   double _selectedSizeValue = 0;
   double _selectedActivityValue = 0;
+  late Position _userPosition;
+  bool _locationAuth = false;
 
   @override
   void initState() {
@@ -190,6 +196,13 @@ class _RegisterDogState extends State<RegisterDog> {
                                             _selectedActivityValue = value;
                                           });
                                         }),
+                                    LocationPage(userPosition: (value) {
+                                      _userPosition = value;
+                                      print(_userPosition);
+                                      setState(() {
+                                        _locationAuth = true;
+                                      });
+                                    }),
 
                                     const SizedBox(width: 24.0),
 
@@ -207,7 +220,7 @@ class _RegisterDogState extends State<RegisterDog> {
                                                     Navigator.of(context).push(
                                                       MaterialPageRoute(
                                                         builder: (context) =>
-                                                            const LoginPage(),
+                                                            const AuthPage(),
                                                       ),
                                                     );
                                                   },
@@ -219,73 +232,93 @@ class _RegisterDogState extends State<RegisterDog> {
                                               const SizedBox(width: 48.0),
                                               Expanded(
                                                 child: OutlinedButton(
-                                                  onPressed: () async {
-                                                    _focusName.unfocus();
+                                                  onPressed: _locationAuth
+                                                      ? () async {
+                                                          _focusName.unfocus();
 
-                                                    if (_registerFormKey
-                                                        .currentState!
-                                                        .validate()) {
-                                                      setState(() {
-                                                        _isProcessing = true;
-                                                      });
+                                                          if (_registerFormKey
+                                                              .currentState!
+                                                              .validate()) {
+                                                            setState(() {
+                                                              _isProcessing =
+                                                                  true;
+                                                            });
 
-                                                      if (_registerFormKey
-                                                          .currentState!
-                                                          .validate()) {
-                                                        //save dog to FireStore
-                                                        firestoreInstance
-                                                            .collection("dogs")
-                                                            .doc()
-                                                            .set({
-                                                          "name":
-                                                              _nameTextController
-                                                                  .text,
-                                                          "image": _avatarPhoto,
-                                                          "owner":
-                                                              _currentUser.uid,
-                                                          "gender":
-                                                              _selectedGenderValue,
-                                                          "age":
-                                                              _selectedAgeValue,
-                                                          "size":
-                                                              _selectedSizeValue,
-                                                          "activity":
-                                                              _selectedActivityValue
-                                                        });
-
-                                                        setState(() {
-                                                          _isProcessing = false;
-                                                        });
-
-                                                        print(
-                                                            'Dog successfully registered!');
-
-                                                        firestoreInstance
-                                                            .collection("dogs")
-                                                            .where("owner",
-                                                                isEqualTo:
+                                                            if (_registerFormKey
+                                                                .currentState!
+                                                                .validate()) {
+                                                              //save dog to FireStore
+                                                              firestoreInstance
+                                                                  .collection(
+                                                                      "dogs")
+                                                                  .doc()
+                                                                  .set({
+                                                                "name":
+                                                                    _nameTextController
+                                                                        .text,
+                                                                "image":
+                                                                    _avatarPhoto,
+                                                                "owner":
                                                                     _currentUser
-                                                                        .uid)
-                                                            .get()
-                                                            .then(
-                                                              (res) => print(
-                                                                  'successfully found ${res.toString()}'),
-                                                              onError: (e) => print(
-                                                                  "Error completing: $e"),
-                                                            );
+                                                                        .uid,
+                                                                "gender":
+                                                                    _selectedGenderValue,
+                                                                "age":
+                                                                    _selectedAgeValue,
+                                                                "size":
+                                                                    _selectedSizeValue,
+                                                                "activity":
+                                                                    _selectedActivityValue,
+                                                                'liked': FieldValue
+                                                                    .arrayUnion(
+                                                                        [null]),
+                                                                'lat':
+                                                                    _userPosition
+                                                                        .latitude,
+                                                                'long':
+                                                                    _userPosition
+                                                                        .longitude
+                                                              });
 
-                                                        Navigator.of(context)
-                                                            .pushReplacement(
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                MyDogs(
-                                                                    user:
-                                                                        _currentUser),
-                                                          ),
-                                                        );
-                                                      }
-                                                    }
-                                                  },
+                                                              setState(() {
+                                                                _isProcessing =
+                                                                    false;
+                                                              });
+
+                                                              print(
+                                                                  'Dog successfully registered!');
+
+                                                              firestoreInstance
+                                                                  .collection(
+                                                                      "dogs")
+                                                                  .where(
+                                                                      "owner",
+                                                                      isEqualTo:
+                                                                          _currentUser
+                                                                              .uid)
+                                                                  .get()
+                                                                  .then(
+                                                                    (res) => print(
+                                                                        'successfully found ${res.toString()}'),
+                                                                    onError: (e) =>
+                                                                        print(
+                                                                            "Error completing: $e"),
+                                                                  );
+
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pushReplacement(
+                                                                MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      MyDogsGallery(
+                                                                          user:
+                                                                              _currentUser),
+                                                                ),
+                                                              );
+                                                            }
+                                                          }
+                                                        }
+                                                      : null,
                                                   child: const Text(
                                                     'Add',
                                                   ),
@@ -299,7 +332,7 @@ class _RegisterDogState extends State<RegisterDog> {
                                                       .pushReplacement(
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          MyDogs(
+                                                          MyDogsGallery(
                                                               user:
                                                                   _currentUser),
                                                     ),
