@@ -23,7 +23,14 @@ class RegisterMyDog extends StatefulWidget {
 
 class _RegisterMyDogState extends State<RegisterMyDog> {
   late Owner _currentOwner;
-  late Dog _currentDog;
+  late Dog _currentDog = Dog(
+      owner: _currentOwner.uid,
+      photo: "",
+      name: "",
+      gender: 0,
+      size: 0,
+      activity: 0,
+      age: 0);
   late bool _nameForm;
   late bool _genderForm;
   late bool _ageForm;
@@ -62,9 +69,6 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _nameForm
-              ? Text(_currentOwner.name + ', Tell us about your dog!')
-              : Text(''),
-          _nameForm
               ? NameForm(onSelect: (value) {
                   setState(() {
                     _nameForm = value!;
@@ -73,65 +77,106 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
                 }, onSubmit: (value) {
                   setState(() {
                     _currentDog.name = value;
+                    print(_currentDog.name);
                   });
                 })
               : _genderForm
-                  ? GenderForm(onSelect: (value) {
-                      setState(() {
-                        _genderForm = value!;
-                        _ageForm = true;
-                      });
-                    }, onSubmit: (value) {
-                      setState(() {
-                        _currentDog.gender = value;
-                      });
-                    })
+                  ? GenderForm(
+                      onSelect: (value) {
+                        setState(() {
+                          _genderForm = value!;
+                          _ageForm = true;
+                        });
+                      },
+                      onSubmit: (value) {
+                        setState(() {
+                          _currentDog.gender = value;
+                        });
+                      },
+                      onBack: (value) {
+                        setState(() {
+                          _nameForm = value!;
+                        });
+                      },
+                    )
                   : _ageForm
-                      ? AgeForm(onSelect: (value) {
-                          setState(() {
-                            _ageForm = value!;
-                            _sizeForm = true;
-                          });
-                        }, onSubmit: (value) {
-                          setState(() {
-                            _currentDog.age = value;
-                          });
-                        })
+                      ? AgeForm(
+                          onSelect: (value) {
+                            setState(() {
+                              _ageForm = value!;
+                              _sizeForm = true;
+                            });
+                          },
+                          onSubmit: (value) {
+                            setState(() {
+                              _currentDog.age = value;
+                            });
+                          },
+                          onBack: (value) {
+                            setState(() {
+                              _genderForm = value!;
+                            });
+                          },
+                        )
                       : _sizeForm
-                          ? SizeForm(onSelect: (value) {
-                              setState(() {
-                                _sizeForm = value!;
-                                _activityForm = true;
-                              });
-                            }, onSubmit: (value) {
-                              setState(() {
-                                _currentDog.size = value;
-                              });
-                            })
+                          ? SizeForm(
+                              onSelect: (value) {
+                                setState(() {
+                                  _sizeForm = value!;
+                                  _activityForm = true;
+                                });
+                              },
+                              onSubmit: (value) {
+                                setState(() {
+                                  _currentDog.size = value;
+                                });
+                              },
+                              onBack: (value) {
+                                setState(() {
+                                  _ageForm = value!;
+                                });
+                              },
+                            )
                           : _activityForm
-                              ? ActivityForm(onSelect: (value) {
-                                  setState(() {
-                                    _activityForm = value!;
-                                    _imageForm = true;
-                                  });
-                                }, onSubmit: (value) {
-                                  setState(() {
-                                    _currentDog.activity = value;
-                                  });
-                                })
+                              ? ActivityForm(
+                                  onSelect: (value) {
+                                    setState(() {
+                                      _activityForm = value!;
+                                      _imageForm = true;
+                                    });
+                                  },
+                                  onSubmit: (value) {
+                                    setState(() {
+                                      _currentDog.activity = value;
+                                    });
+                                  },
+                                  onBack: (value) {
+                                    setState(() {
+                                      _sizeForm = value!;
+                                    });
+                                  },
+                                )
                               : _imageForm
-                                  ? ImageForm(onSelect: (value) {
-                                      setState(() {
-                                        _imageForm = value!;
-                                        _summaryForm = true;
-                                      });
-                                    }, onSubmit: (value) {
-                                      setState(() {
-                                        _currentDog.photo = value;
-                                      });
-                                    })
-                                  : DogSummary(
+                                  ? ImageForm(
                                       onSelect: (value) {
+                                        setState(() {
+                                          _imageForm = value!;
+                                          _summaryForm = true;
+                                        });
+                                      },
+                                      onSubmit: (value) {
+                                        setState(() {
+                                          _currentDog.photo = value;
+                                        });
+                                      },
+                                      onBack: (value) {
+                                        setState(() {
+                                          _activityForm = value!;
+                                        });
+                                      },
+                                    )
+                                  : DogSummary(
+                                      onBack: (value) {
                                         setState(() {
                                           _imageForm = value!;
                                         });
