@@ -47,29 +47,32 @@ class _MyDogsState extends State<MyDogs> {
             return const Text("Looking for dogs!");
           }
 
-          return Column(
-            children: [
-              ListView.builder(
-                physics: const ScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: snapshot2.data?.docs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      radius: 50,
-                      backgroundImage:
-                          NetworkImage(snapshot2.data?.docs[index]['photo']),
-                    ),
-                    title: Text(snapshot2.data?.docs[index]['name']),
-                    subtitle: Text((snapshot2
-                            .data?.docs[index]['buddies'].length
-                            .toString() as String) +
-                        " friends"),
-                  );
-                },
-              ),
-            ],
+          return Container(
+            child: Column(
+              children: [
+                ListView.builder(
+                  physics: const ScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot2.data?.docs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        radius: 50,
+                        backgroundImage:
+                            NetworkImage(snapshot2.data?.docs[index]['photo']),
+                      ),
+                      title: Text(snapshot2.data?.docs[index]['name']),
+                      subtitle: Text((snapshot2
+                              .data?.docs[index]['buddies'].length
+                              .toString() as String) +
+                          " friends"),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                    );
+                  },
+                ),
+              ],
+            ),
           );
         },
       ),

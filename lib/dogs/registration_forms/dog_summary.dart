@@ -6,8 +6,8 @@ import 'package:matchdotdog/dogs/my_dogs.dart';
 import 'package:matchdotdog/dogs/xmy_dogs_gallery.dart';
 import 'package:matchdotdog/unused/login.dart';
 
-import '../models/dog_model.dart';
-import '../models/owner_model.dart';
+import '../../models/dog_model.dart';
+import '../../models/owner_model.dart';
 
 class DogSummary extends StatefulWidget {
   const DogSummary(

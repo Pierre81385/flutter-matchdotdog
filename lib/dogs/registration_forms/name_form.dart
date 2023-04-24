@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-import '../models/dog_model.dart';
-import '../models/owner_model.dart';
-import '../user/validators.dart';
+import '../../user/validators.dart';
 
 class NameForm extends StatefulWidget {
   const NameForm({super.key, required this.onSelect, required this.onSubmit});

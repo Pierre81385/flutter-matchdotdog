@@ -6,13 +6,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:matchdotdog/dogs/xmy_dogs_gallery.dart';
 import 'package:matchdotdog/unused/login.dart';
 import 'package:matchdotdog/dogs/xmy_dog.dart';
-import 'package:matchdotdog/dogs/dog_file_upload.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 import 'package:matchdotdog/ui/paws.dart';
 import '../unused/location.dart';
 import '../user/login.dart';
 import '../user/validators.dart';
 import '../user/fire_auth.dart';
+import 'registration_forms/dog_file_upload.dart';
 //import './dog_model.dart';
 
 class RegisterDog extends StatefulWidget {

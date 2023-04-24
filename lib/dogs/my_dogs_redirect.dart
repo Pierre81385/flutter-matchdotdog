@@ -5,6 +5,7 @@ import 'package:matchdotdog/dogs/register_my_dog.dart';
 import 'package:matchdotdog/dogs/xmy_dog.dart';
 import 'package:matchdotdog/dogs/xmy_dogs_gallery.dart';
 import 'package:matchdotdog/dogs/xregister_dog.dart';
+import 'package:matchdotdog/home.dart';
 import 'package:matchdotdog/models/owner_model.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 
@@ -44,7 +45,7 @@ class _MyDogsRedirectState extends State<MyDogsRedirect> {
           return RegisterMyDog(owner: _currentOwner);
         }
 
-        return MyDogs(owner: _currentOwner);
+        return HomePage(owner: _currentOwner);
       },
     );
   }

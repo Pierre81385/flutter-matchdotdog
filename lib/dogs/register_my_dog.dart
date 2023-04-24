@@ -2,15 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:matchdotdog/dogs/activity_form.dart';
-import 'package:matchdotdog/dogs/age_form.dart';
-import 'package:matchdotdog/dogs/dog_summary.dart';
-import 'package:matchdotdog/dogs/gender_form.dart';
-import 'package:matchdotdog/dogs/image_form.dart';
-import 'package:matchdotdog/dogs/name_form.dart';
-import 'package:matchdotdog/dogs/size_form.dart';
-import 'package:matchdotdog/models/dog_model.dart';
-import 'package:matchdotdog/models/owner_model.dart';
+
+import '../models/dog_model.dart';
+import '../models/owner_model.dart';
+import 'registration_forms/activity_form.dart';
+import 'registration_forms/age_form.dart';
+import 'registration_forms/dog_summary.dart';
+import 'registration_forms/gender_form.dart';
+import 'registration_forms/image_form.dart';
+import 'registration_forms/name_form.dart';
+import 'registration_forms/size_form.dart';
 
 class RegisterMyDog extends StatefulWidget {
   const RegisterMyDog({super.key, required this.owner});
