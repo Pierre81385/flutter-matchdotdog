@@ -19,7 +19,13 @@ class ImageForm extends StatefulWidget {
 }
 
 class _ImageFormState extends State<ImageForm> {
-  late String _URL = 'no image';
+  late String? _URL;
+
+  @override
+  void initState() {
+    super.initState();
+    _URL = 'no image';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +36,7 @@ class _ImageFormState extends State<ImageForm> {
             _URL = value!;
           },
         ),
+        Text("Let's show everyone what your dog looks like!"),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -40,7 +47,8 @@ class _ImageFormState extends State<ImageForm> {
                 icon: Icon(Icons.arrow_back_ios)),
             OutlinedButton(
                 onPressed: () {
-                  widget.onSubmit(_URL);
+                  print(_URL);
+                  widget.onSubmit(_URL!);
                   widget.onSelect(false);
                 },
                 child: Text('Next')),

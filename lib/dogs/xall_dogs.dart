@@ -5,13 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:matchdotdog/dogs/my_dog.dart';
-import 'package:matchdotdog/dogs/my_dogs_gallery.dart';
-import 'package:matchdotdog/dogs/register_dog.dart';
+import 'package:matchdotdog/dogs/xmy_dog.dart';
+import 'package:matchdotdog/dogs/xmy_dogs_gallery.dart';
+import 'package:matchdotdog/dogs/xregister_dog.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:matchdotdog/main.dart';
 import '../ui/size.dart';
-import 'dog_model.dart';
+//import 'dog_model.dart';
 
 //dog object is friend dog.id, but liked needs currentuser.id + user dog.id not friend dog
 
@@ -30,7 +30,7 @@ class AllDogs extends StatefulWidget {
 
 class _AllDogsState extends State<AllDogs> {
   late User _currentUser;
-  late Dog? _currentDog;
+  //late Dog? _currentDog;
   late Stream<QuerySnapshot> _allDogsStream;
   late Stream<QuerySnapshot> _locationsStream;
   late Stream<QuerySnapshot> _oneDogStream;
@@ -48,7 +48,7 @@ class _AllDogsState extends State<AllDogs> {
   @override
   void initState() {
     _currentUser = widget.user;
-    _currentDog = Dog.fromJson(widget.dog);
+    //_currentDog = Dog.fromJson(widget.dog);
 
     _allDogsStream = FirebaseFirestore.instance
         .collection('dogs')
@@ -199,16 +199,16 @@ class _AllDogsState extends State<AllDogs> {
                                                               _checkedDistance =
                                                                   false;
                                                             });
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pushReplacement(
-                                                              MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    MyDogsGallery(
-                                                                        user:
-                                                                            _currentUser),
-                                                              ),
-                                                            );
+                                                            // Navigator.of(
+                                                            //         context)
+                                                            //     .pushReplacement(
+                                                            //   MaterialPageRoute(
+                                                            //     builder: (context) =>
+                                                            //         MyDogsGallery(
+                                                            //             user:
+                                                            //                 _currentUser),
+                                                            //   ),
+                                                            // );
                                                           },
                                                         ),
                                                         IconButton(
@@ -223,18 +223,18 @@ class _AllDogsState extends State<AllDogs> {
                                                               _checkedDistance =
                                                                   false;
                                                             });
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pushReplacement(
-                                                              MaterialPageRoute(
-                                                                builder: (context) => AllDogs(
-                                                                    user:
-                                                                        _currentUser,
-                                                                    dog: _currentDog
-                                                                        as QueryDocumentSnapshot<
-                                                                            Object?>?),
-                                                              ),
-                                                            );
+                                                            // Navigator.of(
+                                                            //         context)
+                                                            //     .pushReplacement(
+                                                            //   MaterialPageRoute(
+                                                            //     builder: (context) => AllDogs(
+                                                            //         user:
+                                                            //             _currentUser,
+                                                            //         dog: _currentDog
+                                                            //             as QueryDocumentSnapshot<
+                                                            //                 Object?>?),
+                                                            //   ),
+                                                            // );
                                                           },
                                                         ),
                                                       ],
@@ -275,27 +275,27 @@ class _AllDogsState extends State<AllDogs> {
                                                           MainAxisAlignment
                                                               .spaceBetween,
                                                       children: [
-                                                        IconButton(
-                                                          iconSize: 50,
-                                                          icon: const Icon(
-                                                            color: mainColor,
-                                                            Icons.location_on,
-                                                          ),
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pushReplacement(
-                                                              MaterialPageRoute(
-                                                                builder: (context) => AllDogs(
-                                                                    user:
-                                                                        _currentUser,
-                                                                    dog: _currentDog
-                                                                        as QueryDocumentSnapshot<
-                                                                            Object?>?),
-                                                              ),
-                                                            );
-                                                          },
-                                                        ),
+                                                        // IconButton(
+                                                        //   iconSize: 50,
+                                                        //   icon: const Icon(
+                                                        //     color: mainColor,
+                                                        //     Icons.location_on,
+                                                        //   ),
+                                                        //   onPressed: () {
+                                                        //     Navigator.of(
+                                                        //             context)
+                                                        //         .pushReplacement(
+                                                        //       MaterialPageRoute(
+                                                        //         builder: (context) => AllDogs(
+                                                        //             user:
+                                                        //                 _currentUser,
+                                                        //             dog: _currentDog
+                                                        //                 as QueryDocumentSnapshot<
+                                                        //                     Object?>?),
+                                                        //       ),
+                                                        //     );
+                                                        //   },
+                                                        // ),
                                                         ///////////////////////////////////////////////////////////////////////////
                                                         IconButton(
                                                           iconSize: 50,

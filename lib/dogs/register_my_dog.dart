@@ -13,7 +13,7 @@ import 'package:matchdotdog/models/dog_model.dart';
 import 'package:matchdotdog/models/owner_model.dart';
 
 class RegisterMyDog extends StatefulWidget {
-  const RegisterMyDog({required this.owner});
+  const RegisterMyDog({super.key, required this.owner});
 
   final Owner owner;
 
@@ -30,7 +30,8 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
       gender: 0,
       size: 0,
       activity: 0,
-      age: 0);
+      age: 0,
+      buddies: []);
   late bool _nameForm;
   late bool _genderForm;
   late bool _ageForm;
@@ -51,7 +52,8 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
         gender: 0,
         size: 0,
         activity: 0,
-        age: 0);
+        age: 0,
+        buddies: []);
 
     _nameForm = true;
     _genderForm = false;
@@ -181,7 +183,9 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
                                           _imageForm = value!;
                                         });
                                       },
-                                      dog: _currentDog)
+                                      dog: _currentDog,
+                                      owner: _currentOwner,
+                                    )
         ],
       ),
     );

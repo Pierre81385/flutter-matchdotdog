@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:matchdotdog/dogs/my_dogs_gallery.dart';
+import 'package:matchdotdog/dogs/xmy_dogs_gallery.dart';
 import 'package:matchdotdog/unused/login.dart';
-import 'package:matchdotdog/dogs/my_dog.dart';
+import 'package:matchdotdog/dogs/xmy_dog.dart';
 import 'package:matchdotdog/dogs/dog_file_upload.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 import 'package:matchdotdog/ui/paws.dart';
@@ -13,7 +13,7 @@ import '../unused/location.dart';
 import '../user/login.dart';
 import '../user/validators.dart';
 import '../user/fire_auth.dart';
-import './dog_model.dart';
+//import './dog_model.dart';
 
 class RegisterDog extends StatefulWidget {
   const RegisterDog({required this.user});
@@ -305,16 +305,16 @@ class _RegisterDogState extends State<RegisterDog> {
                                                                             "Error completing: $e"),
                                                                   );
 
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pushReplacement(
-                                                                MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      MyDogsGallery(
-                                                                          user:
-                                                                              _currentUser),
-                                                                ),
-                                                              );
+                                                              // Navigator.of(
+                                                              //         context)
+                                                              //     .pushReplacement(
+                                                              //   MaterialPageRoute(
+                                                              //     builder: (context) =>
+                                                              //         MyDogsGallery(
+                                                              //             user:
+                                                              //                 _currentUser),
+                                                              //   ),
+                                                              // );
                                                             }
                                                           }
                                                         }
@@ -328,15 +328,15 @@ class _RegisterDogState extends State<RegisterDog> {
                                               Expanded(
                                                   child: OutlinedButton(
                                                 onPressed: () {
-                                                  Navigator.of(context)
-                                                      .pushReplacement(
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          MyDogsGallery(
-                                                              user:
-                                                                  _currentUser),
-                                                    ),
-                                                  );
+                                                  // Navigator.of(context)
+                                                  //     .pushReplacement(
+                                                  //   MaterialPageRoute(
+                                                  //     builder: (context) =>
+                                                  //         MyDogsGallery(
+                                                  //             user:
+                                                  //                 _currentUser),
+                                                  //   ),
+                                                  // );
                                                 },
                                                 child: const Text('Skip'),
                                               ))

@@ -9,8 +9,8 @@ import 'package:matchdotdog/dogs/xregister_dog.dart';
 import 'package:matchdotdog/ui/paws.dart';
 import '../ui/size.dart';
 
-import './xall_dogs.dart';
-import '../unused/dog_model.dart';
+import 'xall_dogs.dart';
+//import 'dog_model.dart';
 
 class MyDog extends StatefulWidget {
   final User user;

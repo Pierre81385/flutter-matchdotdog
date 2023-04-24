@@ -1,23 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:matchdotdog/dogs/dog_model.dart';
-import 'package:matchdotdog/dogs/register_dog.dart';
+import 'package:matchdotdog/unused/dog_model.dart';
+import 'package:matchdotdog/dogs/xregister_dog.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 import 'package:matchdotdog/unused/login.dart';
-import 'package:matchdotdog/dogs/my_dog.dart';
+import 'package:matchdotdog/dogs/xmy_dog.dart';
+
+import '../models/owner_model.dart';
 
 class MyDogsGallery extends StatefulWidget {
-  const MyDogsGallery({super.key, required this.user});
+  const MyDogsGallery({super.key, required this.owner});
 
-  final User user;
+  final Owner owner;
 
   @override
   State<MyDogsGallery> createState() => _MyDogsGalleryState();
 }
 
 class _MyDogsGalleryState extends State<MyDogsGallery> {
-  late User _currentUser;
+  late Owner _currentOwner;
   late Stream<QuerySnapshot> _myDogsStream;
   static const mainColor = Color.fromARGB(255, 94, 168, 172);
   static const secondaryColor = const Color(0xFFFBF7F4);
@@ -25,10 +27,10 @@ class _MyDogsGalleryState extends State<MyDogsGallery> {
 
   @override
   void initState() {
-    _currentUser = widget.user;
+    _currentOwner = widget.owner;
     _myDogsStream = FirebaseFirestore.instance
         .collection('dogs')
-        .where('owner', isEqualTo: _currentUser.uid)
+        .where('owner', isEqualTo: _currentOwner.uid)
         .snapshots();
 
     super.initState();
@@ -70,14 +72,14 @@ class _MyDogsGalleryState extends State<MyDogsGallery> {
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onLongPress: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) => MyDog(
-                                    user: _currentUser,
-                                    dog: snapshot2.data?.docs[index],
-                                  ),
-                                ),
-                              );
+                              // Navigator.of(context).pushReplacement(
+                              //   MaterialPageRoute(
+                              //     builder: (context) => MyDog(
+                              //       user: _currentOwner,
+                              //       dog: snapshot2.data?.docs[index],
+                              //     ),
+                              //   ),
+                              // );
                             },
                             child: Card(
                               shape: RoundedRectangleBorder(
@@ -90,7 +92,7 @@ class _MyDogsGalleryState extends State<MyDogsGallery> {
                                 child: Stack(
                                   children: [
                                     Image.network(
-                                      snapshot2.data?.docs[index]['image'],
+                                      snapshot2.data?.docs[index]['photo'],
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: double.infinity,
@@ -161,13 +163,13 @@ class _MyDogsGalleryState extends State<MyDogsGallery> {
                               Icons.add_box_rounded,
                             ),
                             onPressed: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) => RegisterDog(
-                                    user: _currentUser,
-                                  ),
-                                ),
-                              );
+                              // Navigator.of(context).pushReplacement(
+                              //   MaterialPageRoute(
+                              //     builder: (context) => RegisterDog(
+                              //       user: _currentUser,
+                              //     ),
+                              //   ),
+                              // );
                             },
                           ),
                           IconButton(

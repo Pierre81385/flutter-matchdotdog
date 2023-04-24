@@ -1,51 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:matchdotdog/dogs/register_my_dog.dart';
 import 'package:matchdotdog/dogs/xmy_dog.dart';
 import 'package:matchdotdog/dogs/xmy_dogs_gallery.dart';
 import 'package:matchdotdog/dogs/xregister_dog.dart';
-import 'package:matchdotdog/models/owner_model.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 
-import 'my_dogs.dart';
-
 class MyDogsRedirect extends StatefulWidget {
-  final Owner owner;
+  final User user;
 
-  const MyDogsRedirect({required this.owner});
+  const MyDogsRedirect({required this.user});
 
   @override
   State<MyDogsRedirect> createState() => _MyDogsRedirectState();
 }
 
 class _MyDogsRedirectState extends State<MyDogsRedirect> {
-  late Owner _currentOwner;
+  late User _currentUser;
 
   @override
   void initState() {
-    _currentOwner = widget.owner;
+    _currentUser = widget.user;
     super.initState();
   }
 
   Future loadDogs() async {
     return await FirebaseFirestore.instance
         .collection('dogs')
-        .where('owner', isEqualTo: _currentOwner.uid)
+        .where('owner', isEqualTo: _currentUser.uid)
         .get();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: loadDogs(),
-      builder: (context, snapshot) {
-        if (snapshot.data?.docs.length == 0) {
-          return RegisterMyDog(owner: _currentOwner);
-        }
+    return Placeholder();
+    // FutureBuilder(
+    //   future: loadDogs(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.data?.docs.length == 0) {
+    //       return RegisterDog(user: _currentUser);
+    //     }
 
-        return MyDogs(owner: _currentOwner);
-      },
-    );
+    //     return MyDogsGallery(user: _currentUser);
+    //   },
+    // );
   }
 }
