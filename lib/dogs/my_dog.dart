@@ -45,6 +45,7 @@ class _MyDogState extends State<MyDog> {
         .collection('dogs')
         .where('liked', arrayContains: _currentUser.uid + _currentDog!.id)
         .snapshots();
+
     super.initState();
   }
 

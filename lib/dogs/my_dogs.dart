@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:matchdotdog/dogs/all_buddies.dart';
+import 'package:matchdotdog/dogs/dog_details.dart';
+import 'package:matchdotdog/dogs/register_my_dog.dart';
 import 'package:matchdotdog/models/dog_model.dart';
 
 import '../models/owner_model.dart';
@@ -56,21 +57,55 @@ class _MyDogsState extends State<MyDogs> {
                   shrinkWrap: true,
                   itemCount: snapshot2.data?.docs.length,
                   itemBuilder: (BuildContext context, int index) {
+                    Dog _dog = Dog.fromJson(snapshot2.data?.docs[index]);
                     return ListTile(
+                      onLongPress: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DogDetails(dog: _dog, owner: _currentOwner)
+                              //MyDogsRedirect(user: user)
+                              ),
+                        );
+                      },
                       leading: CircleAvatar(
                         radius: 50,
-                        backgroundImage:
-                            NetworkImage(snapshot2.data?.docs[index]['photo']),
+                        backgroundImage: NetworkImage(_dog.photo),
                       ),
-                      title: Text(snapshot2.data?.docs[index]['name']),
-                      subtitle: Text((snapshot2
-                              .data?.docs[index]['buddies'].length
-                              .toString() as String) +
-                          " friends"),
-                      trailing: Icon(Icons.arrow_forward_ios),
+                      title: Text(_dog.name),
+                      subtitle: Text(
+                          (_dog.buddies.length.toString() as String) +
+                              " friends"),
+                      trailing: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AllBuddies(dog: _dog, owner: _currentOwner)
+                                //MyDogsRedirect(user: user)
+                                ),
+                          );
+                        },
+                        icon: Icon(Icons.pets),
+                      ),
                     );
                   },
                 ),
+                Container(
+                  width: deviceWidth * .33,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                RegisterMyDog(owner: _currentOwner)
+                            //MyDogsRedirect(user: user)
+                            ),
+                      );
+                    },
+                    child: Icon(Icons.add),
+                  ),
+                )
               ],
             ),
           );

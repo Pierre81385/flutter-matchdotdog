@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:matchdotdog/dogs/my_dogs.dart';
 import 'package:matchdotdog/dogs/xmy_dogs_gallery.dart';
+import 'package:matchdotdog/home.dart';
 import 'package:matchdotdog/unused/login.dart';
 
 import '../../models/dog_model.dart';
@@ -81,7 +82,8 @@ class _DogSummaryState extends State<DogSummary> {
 
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                            builder: (context) => MyDogs(owner: _currentOwner)),
+                            builder: (context) =>
+                                HomePage(owner: _currentOwner)),
                       );
                     },
                     child: Text('Submit')),

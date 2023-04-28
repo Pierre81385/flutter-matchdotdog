@@ -34,7 +34,10 @@ class _ImageFormState extends State<ImageForm> {
       children: [
         DogImageUploads(
           onSelect: (value) {
-            _URL = value!;
+            print(value);
+            setState(() {
+              _URL = value!;
+            });
           },
         ),
         Text("Let's show everyone what your dog looks like!"),
@@ -46,13 +49,16 @@ class _ImageFormState extends State<ImageForm> {
                   widget.onBack(true);
                 },
                 icon: Icon(Icons.arrow_back_ios)),
-            OutlinedButton(
-                onPressed: () {
-                  print(_URL);
-                  widget.onSubmit(_URL!);
-                  widget.onSelect(false);
-                },
-                child: Text('Next')),
+            _URL == 'no image'
+                ? OutlinedButton(
+                    onPressed: () {}, child: Text('Image Required'))
+                : OutlinedButton(
+                    onPressed: () {
+                      print(_URL);
+                      widget.onSubmit(_URL!);
+                      widget.onSelect(false);
+                    },
+                    child: Text('Next')),
           ],
         )
       ],

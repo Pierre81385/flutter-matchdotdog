@@ -59,7 +59,7 @@ class _DogImageUploadsState extends State<DogImageUploads> {
           .child('file/');
       await ref.putFile(_photo!);
       downloadUrl = await ref.getDownloadURL();
-      widget.onSelect(downloadUrl);
+      widget.onSelect(await downloadUrl);
     } catch (e) {
       print('error uploading: ${e}');
     }
