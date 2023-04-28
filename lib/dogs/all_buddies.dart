@@ -51,53 +51,71 @@ class _AllBuddiesState extends State<AllBuddies> {
         Dog buddy = Dog.fromJson(snapshot.data?.docs[_index]);
 
         return Scaffold(
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      buddy.photo,
-                      width: width * .95,
-                      height: height * .95,
-                      fit: BoxFit.fitHeight,
+          body: SafeArea(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        buddy.photo,
+                        width: width,
+                        height: height,
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
-                  ),
-                  Text(buddy.name),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _index == 0
-                          ? SizedBox(height: 10, width: 10)
-                          : Container(
-                              height: height,
-                              width: width * .2,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _index--;
-                                  });
-                                },
+                    Text(buddy.name),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _index == 0
+                            ? SizedBox(height: 10, width: 10)
+                            : Container(
+                                height: height,
+                                width: width * .2,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _index--;
+                                    });
+                                  },
+                                ),
                               ),
-                            ),
-                      (_index + 1) == snapshot.data?.docs.length
-                          ? SizedBox(height: 10, width: 10)
-                          : Container(
-                              height: height,
-                              width: width * .2,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _index++;
-                                  });
-                                },
+                        (_index + 1) == snapshot.data?.docs.length
+                            ? SizedBox(height: 10, width: 10)
+                            : Container(
+                                height: height,
+                                width: width * .2,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _index++;
+                                    });
+                                  },
+                                ),
                               ),
-                            ),
-                    ],
-                  )
-                ],
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                                onPressed: () {}, icon: Icon(Icons.person)),
+                            IconButton(
+                                onPressed: () {}, icon: Icon(Icons.pets)),
+                            IconButton(
+                                onPressed: () {}, icon: Icon(Icons.chat)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
