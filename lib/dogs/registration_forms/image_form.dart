@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:matchdotdog/home.dart';
+import 'package:matchdotdog/user/home.dart';
 
 import '../../models/owner_model.dart';
-import '../../user/login.dart';
+import '../../user/auth_page.dart';
 import '../my_dogs.dart';
 import '../my_dogs_redirect.dart';
 import 'dog_file_upload.dart';

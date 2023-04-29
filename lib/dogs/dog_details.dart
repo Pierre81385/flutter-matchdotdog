@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:matchdotdog/home.dart';
+import 'package:matchdotdog/user/home.dart';
 
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';

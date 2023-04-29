@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:matchdotdog/dogs/register_my_dog.dart';
-import 'package:matchdotdog/dogs/xmy_dog.dart';
-import 'package:matchdotdog/dogs/xmy_dogs_gallery.dart';
-import 'package:matchdotdog/dogs/xregister_dog.dart';
-import 'package:matchdotdog/home.dart';
+import 'package:matchdotdog/unused/xmy_dog.dart';
+import 'package:matchdotdog/unused/xmy_dogs_gallery.dart';
+import 'package:matchdotdog/unused/xregister_dog.dart';
+import 'package:matchdotdog/user/home.dart';
 import 'package:matchdotdog/models/owner_model.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 
