@@ -42,7 +42,10 @@ class _MyDogsRedirectState extends State<MyDogsRedirect> {
       future: loadDogs(),
       builder: (context, snapshot) {
         if (snapshot.data?.docs.length == 0) {
-          return RegisterMyDog(owner: _currentOwner);
+          return RegisterMyDog(
+            owner: _currentOwner,
+            referrer: 'login',
+          );
         }
 
         return HomePage(owner: _currentOwner);

@@ -97,8 +97,10 @@ class _MyDogsState extends State<MyDogs> {
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                            builder: (context) =>
-                                RegisterMyDog(owner: _currentOwner)
+                            builder: (context) => RegisterMyDog(
+                                  owner: _currentOwner,
+                                  referrer: 'mydogs',
+                                )
                             //MyDogsRedirect(user: user)
                             ),
                       );

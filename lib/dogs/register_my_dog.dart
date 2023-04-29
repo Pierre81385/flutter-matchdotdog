@@ -14,9 +14,10 @@ import 'registration_forms/name_form.dart';
 import 'registration_forms/size_form.dart';
 
 class RegisterMyDog extends StatefulWidget {
-  const RegisterMyDog({super.key, required this.owner});
+  const RegisterMyDog({super.key, required this.owner, required this.referrer});
 
   final Owner owner;
+  final String referrer;
 
   @override
   State<RegisterMyDog> createState() => _RegisterMyDogState();
@@ -40,10 +41,12 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
   late bool _activityForm;
   late bool _imageForm;
   late bool _summaryForm;
+  late String _currentReferrer;
 
   @override
   void initState() {
     super.initState();
+    _currentReferrer = widget.referrer;
 
     _currentOwner = widget.owner;
     _currentDog = Dog(
@@ -72,17 +75,22 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _nameForm
-              ? NameForm(onSelect: (value) {
-                  setState(() {
-                    _nameForm = value!;
-                    _genderForm = true;
-                  });
-                }, onSubmit: (value) {
-                  setState(() {
-                    _currentDog.name = value;
-                    print(_currentDog.name);
-                  });
-                })
+              ? NameForm(
+                  onSelect: (value) {
+                    setState(() {
+                      _nameForm = value!;
+                      _genderForm = true;
+                    });
+                  },
+                  onSubmit: (value) {
+                    setState(() {
+                      _currentDog.name = value;
+                      print(_currentDog.name);
+                    });
+                  },
+                  referrer: _currentReferrer,
+                  owner: _currentOwner,
+                )
               : _genderForm
                   ? GenderForm(
                       onSelect: (value) {
@@ -101,6 +109,8 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
                           _nameForm = value!;
                         });
                       },
+                      referrer: _currentReferrer,
+                      owner: _currentOwner,
                     )
                   : _ageForm
                       ? AgeForm(
@@ -120,6 +130,8 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
                               _genderForm = value!;
                             });
                           },
+                          referrer: _currentReferrer,
+                          owner: _currentOwner,
                         )
                       : _sizeForm
                           ? SizeForm(
@@ -139,6 +151,8 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
                                   _ageForm = value!;
                                 });
                               },
+                              referrer: _currentReferrer,
+                              owner: _currentOwner,
                             )
                           : _activityForm
                               ? ActivityForm(
@@ -158,6 +172,8 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
                                       _sizeForm = value!;
                                     });
                                   },
+                                  referrer: _currentReferrer,
+                                  owner: _currentOwner,
                                 )
                               : _imageForm
                                   ? ImageForm(
@@ -177,6 +193,8 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
                                           _activityForm = value!;
                                         });
                                       },
+                                      referrer: _currentReferrer,
+                                      owner: _currentOwner,
                                     )
                                   : DogSummary(
                                       onBack: (value) {
@@ -186,6 +204,7 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
                                       },
                                       dog: _currentDog,
                                       owner: _currentOwner,
+                                      referrer: _currentReferrer,
                                     )
         ],
       ),

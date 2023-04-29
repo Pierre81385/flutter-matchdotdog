@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:matchdotdog/dogs/my_dogs.dart';
+import 'package:matchdotdog/home.dart';
 import 'package:matchdotdog/models/owner_model.dart';
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';
@@ -105,7 +107,14 @@ class _AllBuddiesState extends State<AllBuddies> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             IconButton(
-                                onPressed: () {}, icon: Icon(Icons.person)),
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            HomePage(owner: _currentOwner)),
+                                  );
+                                },
+                                icon: Icon(Icons.person)),
                             IconButton(
                                 onPressed: () {}, icon: Icon(Icons.pets)),
                             IconButton(
