@@ -108,7 +108,10 @@ class _DogSummaryState extends State<DogSummary> {
                         _isProcessing = true;
                       });
 
-                      firestoreInstance.collection("dogs").doc().set({
+                      String id =
+                          firestoreInstance.collection("users").doc().id;
+
+                      firestoreInstance.collection("dogs").doc(id).set({
                         "owner": _currentDog.owner,
                         "name": _currentDog.name,
                         "photo": _currentDog.photo,
@@ -117,6 +120,13 @@ class _DogSummaryState extends State<DogSummary> {
                         "gender": _currentDog.gender,
                         "size": _currentDog.size,
                         "buddies": [],
+                      });
+
+                      firestoreInstance
+                          .collection('owners')
+                          .doc(_currentOwner.uid)
+                          .update({
+                        "dogs": FieldValue.arrayUnion([id])
                       });
 
                       setState(() {
