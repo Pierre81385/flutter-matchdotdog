@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:matchdotdog/models/owner_model.dart';
 import 'package:matchdotdog/user/avatar_upload.dart';
 import 'package:matchdotdog/user/validators.dart';
-import '../dogs/register_dog.dart';
+import '../unused/xregister_dog.dart';
 import '../dogs/register_my_dog.dart';
 import 'fire_auth.dart';
 
@@ -35,6 +35,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   String _avatarPhoto = 'no photo';
   late Position _userPosition;
   bool _locationAuth = false;
+  late String _currentReferrer;
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -185,14 +186,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             );
 
                             _owner = Owner(
-                                uid: user?.uid as String,
-                                name: _nameRegisterTextController.text,
-                                email: _emailRegisterTextController.text,
-                                avatar: _avatarPhoto,
-                                locationLat: _userPosition.latitude,
-                                locationLong: _userPosition.longitude,
-                                dogs: [],
-                                friends: []);
+                              uid: user?.uid as String,
+                              name: _nameRegisterTextController.text,
+                              email: _emailRegisterTextController.text,
+                              avatar: _avatarPhoto,
+                              locationLat: _userPosition.latitude,
+                              locationLong: _userPosition.longitude,
+                              dogs: [],
+                              //friends: []
+                            );
 
                             Map<String, dynamic> map = {
                               'uid': _owner.uid,
@@ -202,7 +204,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               'locationLat': _owner.locationLat,
                               'locationLong': _owner.locationLong,
                               'dogs': _owner.dogs,
-                              'friends': _owner.friends
+                              //'friends': _owner.friends
                             };
 
                             firestoreInstance
@@ -216,8 +218,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                   'Sending user information to dog registration page!');
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      RegisterMyDog(owner: _owner),
+                                  builder: (context) => RegisterMyDog(
+                                    owner: _owner,
+                                    referrer: 'register',
+                                  ),
                                 ),
                               );
                             }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:matchdotdog/dogs/register_dog.dart';
+import 'package:matchdotdog/unused/xregister_dog.dart';
 import 'package:matchdotdog/unused/login.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 import '../user/fire_auth.dart';

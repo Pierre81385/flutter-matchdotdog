@@ -8,17 +8,18 @@ class Owner {
   double locationLat;
   double locationLong;
   List<dynamic> dogs;
-  List<dynamic> friends;
+  //List<dynamic> friends;
 
-  Owner(
-      {required this.uid,
-      required this.name,
-      required this.email,
-      required this.avatar,
-      required this.locationLat,
-      required this.locationLong,
-      required this.dogs,
-      required this.friends});
+  Owner({
+    required this.uid,
+    required this.name,
+    required this.email,
+    required this.avatar,
+    required this.locationLat,
+    required this.locationLong,
+    required this.dogs,
+    //required this.friends
+  });
 
   Owner.fromJson(QueryDocumentSnapshot<Object?>? json)
       : uid = json!['uid'],
@@ -27,8 +28,9 @@ class Owner {
         avatar = json!['avatar'],
         locationLat = json!['locationLat'],
         locationLong = json!['locationLong'],
-        dogs = json!['dogs'],
-        friends = json!['friends'];
+        dogs = json!['dogs']
+  //friends = json!['friends']
+  ;
 
   factory Owner.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -43,7 +45,7 @@ class Owner {
       locationLat: data?['locationLat'],
       locationLong: data?['locationLong'],
       dogs: [data?['dogs']],
-      friends: [data?['friends']],
+      //friends: [data?['friends']],
     );
   }
 
@@ -56,7 +58,7 @@ class Owner {
       if (locationLat != null) "locationLat": locationLat,
       if (locationLong != null) "locationLong": locationLong,
       if (dogs != null) "dogs": dogs,
-      if (friends != null) "friends": friends,
+      //if (friends != null) "friends": friends,
     };
   }
 }

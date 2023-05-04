@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../dogs/dog_model.dart';
+import 'dog_model.dart';
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({Key? key, required this.profile}) : super(key: key);

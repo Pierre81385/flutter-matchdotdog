@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:matchdotdog/dogs/my_dogs_redirect.dart';
 import 'package:matchdotdog/dogs/register_my_dog.dart';
 
-import '../dogs/my_dogs_redirect.dart';
 import '../models/owner_model.dart';
 import 'fire_auth.dart';
 import 'validators.dart';
@@ -118,7 +118,7 @@ class _LoginFormState extends State<LoginForm> {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    RegisterMyDog(owner: _owner)
+                                    MyDogsRedirect(owner: _owner)
                                 //MyDogsRedirect(user: user)
                                 ),
                           );

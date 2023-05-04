@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../main.dart';
-import '../dogs/dog_model.dart';
+import 'dog_model.dart';
 import 'xdog_profile.dart';
 import 'xtag_widget.dart';
 

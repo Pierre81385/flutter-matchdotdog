@@ -1,10 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:matchdotdog/dogs/my_dogs.dart';
+import 'package:matchdotdog/chat/chat.dart';
 import 'package:matchdotdog/user/home.dart';
-import 'package:matchdotdog/models/owner_model.dart';
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';
 
@@ -20,19 +19,26 @@ class AllBuddies extends StatefulWidget {
 
 class _AllBuddiesState extends State<AllBuddies> {
   late Owner _currentOwner;
-  late Dog _currnetDog;
+  late Dog _currentDog;
   late Stream<QuerySnapshot> _allBuddiesStream;
+  late Stream<DocumentSnapshot<Map<String, dynamic>>> _currentDogStream;
   late int _index;
+  late bool _buddyState;
 
   @override
   void initState() {
     _currentOwner = widget.owner;
-    _currnetDog = widget.dog;
+    _currentDog = widget.dog;
     _index = 0;
     _allBuddiesStream = FirebaseFirestore.instance
         .collection('dogs')
         .where('owner', isNotEqualTo: _currentOwner.uid)
         .snapshots();
+    _currentDogStream = FirebaseFirestore.instance
+        .collection('dogs')
+        .doc(_currentDog.id)
+        .snapshots();
+    _buddyState = false;
   }
 
   @override
@@ -50,7 +56,7 @@ class _AllBuddiesState extends State<AllBuddies> {
           return const Text("Loading");
         }
 
-        Dog buddy = Dog.fromJson(snapshot.data?.docs[_index]);
+        Dog _currentBuddy = Dog.fromJson(snapshot.data?.docs[_index]);
 
         return Scaffold(
           body: SafeArea(
@@ -62,13 +68,13 @@ class _AllBuddiesState extends State<AllBuddies> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
-                        buddy.photo,
+                        _currentBuddy.photo,
                         width: width,
                         height: height,
                         fit: BoxFit.fitHeight,
                       ),
                     ),
-                    Text(buddy.name),
+                    Text(_currentBuddy.name),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -107,6 +113,7 @@ class _AllBuddiesState extends State<AllBuddies> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             IconButton(
+                                color: Colors.white,
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
@@ -116,9 +123,85 @@ class _AllBuddiesState extends State<AllBuddies> {
                                 },
                                 icon: Icon(Icons.person)),
                             IconButton(
-                                onPressed: () {}, icon: Icon(Icons.pets)),
+                              iconSize: 50,
+                              //check if _currentDog has liked this buddy or not
+                              color:
+                                  _currentBuddy.buddies.contains(_currentDog.id)
+                                      ? Colors.red
+                                      : Colors.white,
+                              icon: const Icon(Icons.pets_rounded),
+                              onPressed: () {
+                                //currently widget.dog.id = THIS DOG not users dog
+                                if (_currentDog.buddies
+                                    .contains(_currentBuddy.id)) {
+                                  print("removing this buddy from current dog");
+                                  FirebaseFirestore.instance
+                                      .collection("dogs")
+                                      .doc(_currentDog.id)
+                                      .update({
+                                    'buddies': FieldValue.arrayRemove(
+                                        [_currentBuddy.id])
+                                  });
+                                  setState(() {
+                                    _currentDog.buddies
+                                        .remove(_currentBuddy.id);
+                                  });
+                                  print('removing current dog from this buddy');
+                                  FirebaseFirestore.instance
+                                      .collection("dogs")
+                                      .doc(_currentBuddy.id)
+                                      .update({
+                                    'buddies':
+                                        FieldValue.arrayRemove([_currentDog.id])
+                                  });
+                                  setState(() {
+                                    _currentBuddy.buddies
+                                        .remove(_currentDog.id);
+                                  });
+                                  print('buddy removed');
+                                } else {
+                                  print("adding this buddy to current dog");
+                                  FirebaseFirestore.instance
+                                      .collection("dogs")
+                                      .doc(_currentDog.id)
+                                      .update({
+                                    'buddies': FieldValue.arrayUnion(
+                                        [_currentBuddy.id])
+                                  });
+                                  setState(() {
+                                    _currentDog.buddies.add(_currentBuddy.id);
+                                  });
+                                  print('adding this dog to current buddy');
+                                  FirebaseFirestore.instance
+                                      .collection("dogs")
+                                      .doc(_currentBuddy.id)
+                                      .update({
+                                    'buddies':
+                                        FieldValue.arrayUnion([_currentDog.id])
+                                  });
+                                  setState(() {
+                                    _currentBuddy.buddies
+                                        .remove(_currentDog.id);
+                                  });
+                                  print('buddy added');
+                                  print('current buddies now ' +
+                                      _currentDog.buddies.toString());
+                                }
+                              },
+                            ),
                             IconButton(
-                                onPressed: () {}, icon: Icon(Icons.chat)),
+                                color: Colors.white,
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => Chat(
+                                              owner: _currentOwner,
+                                              dog: _currentDog,
+                                              buddy: _currentBuddy,
+                                            )),
+                                  );
+                                },
+                                icon: Icon(Icons.chat)),
                           ],
                         )
                       ],

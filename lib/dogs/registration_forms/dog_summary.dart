@@ -108,10 +108,10 @@ class _DogSummaryState extends State<DogSummary> {
                         _isProcessing = true;
                       });
 
-                      String id =
-                          firestoreInstance.collection("users").doc().id;
+                      String id = firestoreInstance.collection("dogs").doc().id;
 
                       firestoreInstance.collection("dogs").doc(id).set({
+                        "id": id,
                         "owner": _currentDog.owner,
                         "name": _currentDog.name,
                         "photo": _currentDog.photo,

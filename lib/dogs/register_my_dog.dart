@@ -26,6 +26,7 @@ class RegisterMyDog extends StatefulWidget {
 class _RegisterMyDogState extends State<RegisterMyDog> {
   late Owner _currentOwner;
   late Dog _currentDog = Dog(
+      id: "",
       owner: _currentOwner.uid,
       photo: "",
       name: "",
@@ -50,6 +51,7 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
 
     _currentOwner = widget.owner;
     _currentDog = Dog(
+        id: "",
         owner: _currentOwner.uid,
         photo: "",
         name: "",

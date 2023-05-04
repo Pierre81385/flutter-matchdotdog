@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:matchdotdog/dogs/my_dogs_redirect.dart';
+import 'package:matchdotdog/unused/xmy_dogs_redirect.dart';
 import 'package:matchdotdog/unused/register.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 import '../user/fire_auth.dart';

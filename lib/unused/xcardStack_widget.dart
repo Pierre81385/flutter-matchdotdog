@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
-import '../dogs/dog_model.dart';
+import 'dog_model.dart';
 import 'xdrag_widget.dart';
 
 class CardsStackWidget extends StatefulWidget {

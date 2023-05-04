@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:matchdotdog/unused/login.dart';
-import 'package:matchdotdog/user/login.dart';
+import 'package:matchdotdog/user/auth_page.dart';
 import 'package:matchdotdog/unused/register.dart';
 import 'package:matchdotdog/ui/main_background.dart';
 
