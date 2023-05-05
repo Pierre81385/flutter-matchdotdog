@@ -8,6 +8,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:matchdotdog/user/home.dart';
 
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';
@@ -29,24 +30,33 @@ class _ChatState extends State<Chat> {
   late Owner _currentUser;
   late Dog _buddy;
   late Owner _buddyOwner;
+  late DocumentSnapshot _docSnap;
+  final firestoreInstance = FirebaseFirestore.instance;
+  late DocumentReference<Owner> ref;
+
+  void getBuddyOwner() async {
+    ref =
+        firestoreInstance.collection("owners").doc(_buddy.owner).withConverter(
+              fromFirestore: Owner.fromFirestore,
+              toFirestore: (Owner owner, _) => owner.toFirestore(),
+            );
+
+    final docSnap = await ref.get();
+
+    _buddyOwner = docSnap.data()!;
+  }
 
   @override
   void initState() {
+    super.initState();
     //get current dog
     _currentDog = widget.dog;
-    print(_currentDog);
     //get current user
     _currentUser = widget.owner;
-    print(_currentUser);
     //get buddy
     _buddy = widget.buddy;
-    print(_buddy);
     //get buddy owner
-    _buddyOwner = Owner.fromJson(FirebaseFirestore.instance
-        .collection('owners')
-        .doc(_buddy.owner)
-        .get() as QueryDocumentSnapshot<Object?>?);
-    print(_buddyOwner);
+    getBuddyOwner();
   }
 
   //if no buddies, display message
@@ -59,6 +69,23 @@ class _ChatState extends State<Chat> {
   //display stream of dog/user + buddy/owner exchange
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(_currentUser.name + ' and ' + _currentDog.name),
+          Text('chat with'),
+          Text(_buddy.name + ' and ' + _buddyOwner.name),
+          IconButton(
+              color: Colors.black,
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                      builder: (context) => HomePage(owner: _currentUser)),
+                );
+              },
+              icon: Icon(Icons.arrow_back_ios))
+        ]),
+      ),
+    );
   }
 }

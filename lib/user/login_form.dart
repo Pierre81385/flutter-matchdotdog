@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:matchdotdog/dogs/my_dogs_redirect.dart';
 import 'package:matchdotdog/dogs/register_my_dog.dart';
 
@@ -28,6 +29,53 @@ class _LoginFormState extends State<LoginForm> {
   late Future<QuerySnapshot<Owner>> _ownerDoc;
   late Owner _owner;
   final firestoreInstance = FirebaseFirestore.instance;
+  late Position _userPosition;
+  bool _locationAuth = false;
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      print('getting user location: ' + position.toString());
+      setState(() {
+        _userPosition = position;
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +136,7 @@ class _LoginFormState extends State<LoginForm> {
                           password: _passwordLoginTextController.text,
                         );
 
-                        setState(() {
-                          _isProcessing = false;
-                        });
+                        _getCurrentPosition();
 
                         if (user != null) {
                           print("User is successfully logged in!");
@@ -108,12 +154,27 @@ class _LoginFormState extends State<LoginForm> {
 
                           _owner = docSnap.data()!;
 
+                          _owner.locationLat = _userPosition.latitude;
+                          _owner.locationLong = _userPosition.longitude;
+
+                          FirebaseFirestore.instance
+                              .collection('owners')
+                              .doc(_owner.uid)
+                              .set({
+                            'locationLat': _owner.locationLat,
+                            'locationLong': _owner.locationLong
+                          });
+
                           if (_owner != null) {
                             print('found owner:');
                             print(_owner);
                           } else {
                             print("No such document.");
                           }
+
+                          setState(() {
+                            _isProcessing = false;
+                          });
 
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
