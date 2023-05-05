@@ -33,6 +33,7 @@ class _ChatState extends State<Chat> {
   late DocumentSnapshot _docSnap;
   final firestoreInstance = FirebaseFirestore.instance;
   late DocumentReference<Owner> ref;
+  bool _isProcessing = false;
 
   void getBuddyOwner() async {
     ref =
@@ -44,11 +45,15 @@ class _ChatState extends State<Chat> {
     final docSnap = await ref.get();
 
     _buddyOwner = docSnap.data()!;
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    _isProcessing = true;
     //get current dog
     _currentDog = widget.dog;
     //get current user
@@ -71,20 +76,23 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(_currentUser.name + ' and ' + _currentDog.name),
-          Text('chat with'),
-          Text(_buddy.name + ' and ' + _buddyOwner.name),
-          IconButton(
-              color: Colors.black,
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                      builder: (context) => HomePage(owner: _currentUser)),
-                );
-              },
-              icon: Icon(Icons.arrow_back_ios))
-        ]),
+        child: _isProcessing
+            ? CircularProgressIndicator()
+            : Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(_currentUser.name + ' and ' + _currentDog.name),
+                Text('chat with'),
+                Text(_buddy.name + ' and ' + _buddyOwner.name),
+                IconButton(
+                    color: Colors.black,
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HomePage(owner: _currentUser)),
+                      );
+                    },
+                    icon: Icon(Icons.arrow_back_ios))
+              ]),
       ),
     );
   }

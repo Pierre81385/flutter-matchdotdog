@@ -71,6 +71,8 @@ class _LoginFormState extends State<LoginForm> {
       print('getting user location: ' + position.toString());
       setState(() {
         _userPosition = position;
+        _owner.locationLat = _userPosition.latitude;
+        _owner.locationLong = _userPosition.longitude;
       });
     }).catchError((e) {
       print(e);
@@ -121,72 +123,78 @@ class _LoginFormState extends State<LoginForm> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: OutlinedButton(
-                    onPressed: () async {
-                      _focusLoginEmail.unfocus();
-                      _focusLoginPassword.unfocus();
-
-                      if (_loginFormKey.currentState!.validate()) {
-                        setState(() {
-                          _isProcessing = true;
-                        });
-
-                        User? user = await FireAuth.signInUsingEmailPassword(
-                          email: _emailLoginTextController.text,
-                          password: _passwordLoginTextController.text,
-                        );
-
-                        _getCurrentPosition();
-
-                        if (user != null) {
-                          print("User is successfully logged in!");
-
-                          final ref = firestoreInstance
-                              .collection("owners")
-                              .doc(user.uid)
-                              .withConverter(
-                                fromFirestore: Owner.fromFirestore,
-                                toFirestore: (Owner owner, _) =>
-                                    owner.toFirestore(),
-                              );
-
-                          final docSnap = await ref.get();
-
-                          _owner = docSnap.data()!;
-
-                          _owner.locationLat = _userPosition.latitude;
-                          _owner.locationLong = _userPosition.longitude;
-
-                          FirebaseFirestore.instance
-                              .collection('owners')
-                              .doc(_owner.uid)
-                              .set({
-                            'locationLat': _owner.locationLat,
-                            'locationLong': _owner.locationLong
-                          });
-
-                          if (_owner != null) {
-                            print('found owner:');
-                            print(_owner);
-                          } else {
-                            print("No such document.");
-                          }
-
+                child: _isProcessing
+                    ? CircularProgressIndicator()
+                    : OutlinedButton(
+                        onPressed: () async {
                           setState(() {
-                            _isProcessing = false;
+                            _isProcessing = true;
                           });
 
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    MyDogsRedirect(owner: _owner)
-                                //MyDogsRedirect(user: user)
-                                ),
-                          );
-                        }
-                      }
-                    },
-                    child: Text('Login')),
+                          _focusLoginEmail.unfocus();
+                          _focusLoginPassword.unfocus();
+
+                          if (_loginFormKey.currentState!.validate()) {
+                            setState(() {
+                              _isProcessing = true;
+                            });
+
+                            User? user =
+                                await FireAuth.signInUsingEmailPassword(
+                              email: _emailLoginTextController.text,
+                              password: _passwordLoginTextController.text,
+                            );
+
+                            if (user != null) {
+                              print("User is successfully logged in!");
+
+                              final ref = firestoreInstance
+                                  .collection("owners")
+                                  .doc(user.uid)
+                                  .withConverter(
+                                    fromFirestore: Owner.fromFirestore,
+                                    toFirestore: (Owner owner, _) =>
+                                        owner.toFirestore(),
+                                  );
+
+                              final docSnap = await ref.get();
+
+                              _owner = docSnap.data()!;
+
+                              _getCurrentPosition();
+
+                              FirebaseFirestore.instance
+                                  .collection('owners')
+                                  .doc(_owner.uid)
+                                  .update({
+                                'locationLat': _owner.locationLat,
+                                'locationLong': _owner.locationLong
+                              });
+
+                              print('owner doc updated with current position!');
+
+                              if (_owner != null) {
+                                print('found owner:');
+                                print(_owner);
+                              } else {
+                                print("No such document.");
+                              }
+
+                              setState(() {
+                                _isProcessing = false;
+                              });
+
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MyDogsRedirect(owner: _owner)
+                                    //MyDogsRedirect(user: user)
+                                    ),
+                              );
+                            }
+                          }
+                        },
+                        child: Text('Login')),
               ),
             ],
           ),

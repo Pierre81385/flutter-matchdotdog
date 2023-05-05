@@ -47,9 +47,17 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex, //New
         onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.manage_accounts_sharp),
+            icon: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => AuthPage()
+                        //MyDogsRedirect(user: user)
+                        ),
+                  );
+                },
+                icon: Icon(Icons.arrow_back_ios_new)),
             label: 'Me',
           ),
           BottomNavigationBarItem(
