@@ -194,7 +194,7 @@ class _AllBuddiesState extends State<AllBuddies> {
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
-                                        builder: (context) => Chat(
+                                        builder: (context) => ChatView(
                                               owner: _currentOwner,
                                               dog: _currentDog,
                                               buddy: _currentBuddy,

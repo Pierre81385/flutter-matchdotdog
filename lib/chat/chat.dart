@@ -10,11 +10,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:matchdotdog/user/home.dart';
 
+import '../models/chat_model.dart';
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';
 
-class Chat extends StatefulWidget {
-  const Chat(
+class ChatView extends StatefulWidget {
+  const ChatView(
       {super.key, required this.dog, required this.owner, required this.buddy});
 
   final Dog dog;
@@ -22,10 +23,10 @@ class Chat extends StatefulWidget {
   final Owner owner;
 
   @override
-  State<Chat> createState() => _ChatState();
+  State<ChatView> createState() => _ChatViewState();
 }
 
-class _ChatState extends State<Chat> {
+class _ChatViewState extends State<ChatView> {
   late Dog _currentDog;
   late Owner _currentUser;
   late Dog _buddy;
@@ -34,6 +35,7 @@ class _ChatState extends State<Chat> {
   final firestoreInstance = FirebaseFirestore.instance;
   late DocumentReference<Owner> ref;
   bool _isProcessing = false;
+  late Stream<QuerySnapshot> _chatStream;
 
   void getBuddyOwner() async {
     ref =
@@ -62,37 +64,89 @@ class _ChatState extends State<Chat> {
     _buddy = widget.buddy;
     //get buddy owner
     getBuddyOwner();
+
+    _chatStream = FirebaseFirestore.instance
+        .collection('chats')
+        .where('dogId', isEqualTo: _currentDog.id)
+        .where('buddyId', isEqualTo: _buddy.id)
+        .snapshots();
   }
 
-  //if no buddies, display message
-
-  //buddy + owner on top
-  //dog + user on bottom
-
-  //set message from dog/user
-
-  //display stream of dog/user + buddy/owner exchange
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _isProcessing
-            ? CircularProgressIndicator()
-            : Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(_currentUser.name + ' and ' + _currentDog.name),
-                Text('chat with'),
-                Text(_buddy.name + ' and ' + _buddyOwner.name),
-                IconButton(
-                    color: Colors.black,
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(owner: _currentUser)),
-                      );
-                    },
-                    icon: Icon(Icons.arrow_back_ios))
-              ]),
+      body: SafeArea(
+        child: Center(
+          child: _isProcessing
+              ? CircularProgressIndicator()
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: NetworkImage(_buddy.photo),
+                          ),
+                          Text(_buddy.name)
+                        ],
+                      ),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: _chatStream,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            return const Text('Something went wrong');
+                          }
+
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Text("Looking for messages!");
+                          }
+
+                          return snapshot.hasData
+                              ? Container(
+                                  child: Column(
+                                    children: [
+                                      ListView.builder(
+                                        physics: const ScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        reverse: true,
+                                        shrinkWrap: true,
+                                        itemCount: snapshot.data?.docs.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          Chat _chat = Chat.fromJson(
+                                              snapshot.data?.docs[index]);
+                                          return ListTile(
+                                            title: Text(_chat.message),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Expanded(child: Text('Get this chat started!'));
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(child: TextField()),
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.send_sharp,
+                                  color: Colors.black,
+                                ))
+                          ],
+                        ),
+                      )
+                    ]),
+        ),
       ),
     );
   }

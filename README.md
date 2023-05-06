@@ -37,13 +37,48 @@ Find a playmate for your puppy near you, and chat with friends to make the arran
 
 ## login/register page
 
-- login with email/password combination
-- on sucessful login, Firestore DB is
+- the \_currentOwner object is created here
 
-- register and login with Firebase Auth
-- add dogs handled by Firebase Firestore, image upload with 'image_picker'
-- how should Location be handled?
-  - during registration, ask for location services to be allowed
-  - record ZipCode during registration
-  - if location services is on, determine distance between your current location and dogs home zipcode
-  - if location services is off, determine distance between your zipcode and dogs zipcode
+- enter information about your dog 1 form at a time
+
+  - all information is saved to a new Dog object
+
+  * UI needs to convert slider values to custom values
+  * image upload needs processing animation for image upload await
+  * registration form needs a Dog description field
+  * dog summary needs UI
+  * validate all fields
+  * needs a forgot password option
+  * if submit fails, needs error message
+
+  - on submit the dog object is complete and sent to FirebaseFirestore
+  - ---> move user to 'home' screen
+
+- enter email address and password for login
+
+* needs gmail option at the very least
+  - on submit processing animation begins, Auth is verified by FirebaseAuth
+  - get current position function runs
+  - on FirebaseAuth success, owner doc retrieved from FirebaseFirestore and is converted to new Owner object
+  - new Owner object is updated with current long and lat values
+  - FirebaseFirestore doc is updated with current long and lat values to save
+  * needs user facing error message if owner document doesn't exist!
+  - processing animation ends
+  - ---> move user to 'redirect' check
+
+## Redirect page
+
+- requires \_currentOwner object
+
+- a check here to verify the user has registered at least 1 dog is performed by getting all dogs where owner is equal to the dogs owner value
+- if this returns nothing, ---> move user to 'Register Dog' screen
+- if this returns at least 1 dog, ---> move user to 'Home' screen
+
+## Home Page
+
+- requires \_currentOwner object
+
+- this page is primarily a viewer for
+  - dog list: a list of all your dogs
+  - map view: a map showing other dogs nearby
+  - chat view: a list of all current chats

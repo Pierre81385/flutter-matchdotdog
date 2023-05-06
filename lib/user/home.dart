@@ -36,8 +36,9 @@ class _HomePageState extends State<HomePage> {
     List<Widget> _bottomNavPages = <Widget>[
       AuthPage(),
       MyDogs(owner: _currentOwner),
+      Icon(Icons.location_on_outlined),
       Icon(
-        Icons.chat,
+        Icons.chat_bubble_outline,
         size: 150,
       ),
     ];
@@ -57,16 +58,44 @@ class _HomePageState extends State<HomePage> {
                         ),
                   );
                 },
-                icon: Icon(Icons.arrow_back_ios_new)),
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.black,
+                )),
             label: 'Me',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
+            icon: Icon(
+              Icons.list,
+              color: Colors.black,
+            ),
+            activeIcon: Icon(
+              Icons.list,
+              color: Colors.amber,
+            ),
             label: 'My Dogs',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
+            icon: Icon(
+              Icons.location_on,
+              color: Colors.black,
+            ),
+            activeIcon: Icon(
+              Icons.location_on,
+              color: Colors.amber,
+            ),
             label: 'Map',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.chat_bubble_outline,
+              color: Colors.black,
+            ),
+            activeIcon: Icon(
+              Icons.chat_bubble_outline,
+              color: Colors.amber,
+            ),
+            label: 'Chats',
           ),
         ],
       ),
