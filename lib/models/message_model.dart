@@ -2,45 +2,45 @@ import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Chat {
+class Message {
   String id;
-  String dogId;
-  String buddyId;
+  String code;
+  List<dynamic> dogs;
   String sender;
-  Timestamp timestamp;
+  Timestamp time;
   String message;
   String attachment;
 
-  Chat({
+  Message({
     required this.id,
-    required this.dogId,
-    required this.buddyId,
+    required this.code,
+    required this.dogs,
     required this.sender,
-    required this.timestamp,
+    required this.time,
     required this.message,
     required this.attachment,
   });
 
-  Chat.fromJson(QueryDocumentSnapshot<Object?>? json)
+  Message.fromJson(QueryDocumentSnapshot<Object?>? json)
       : id = json!['id'],
-        dogId = json!['dogId'],
-        buddyId = json!['buddyId'],
+        code = json!['code'],
+        dogs = json!['dogs'],
         sender = json!['sender'],
-        timestamp = json!['timestamp'],
+        time = json!['time'],
         message = json!['message'],
         attachment = json!['attachment'];
 
-  factory Chat.fromFirestore(
+  factory Message.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return Chat(
+    return Message(
         id: data?['id'],
-        dogId: data?['dogId'],
-        buddyId: data?['buddyId'],
+        code: data?['code'],
+        dogs: data?['dogs'],
         sender: data?['sender'],
-        timestamp: data?['timestamp'],
+        time: data?['time'],
         message: data?['message'],
         attachment: data?['attachment']);
   }
@@ -48,10 +48,10 @@ class Chat {
   Map<String, dynamic> toFirestore() {
     return {
       if (id != null) 'id': id,
-      if (dogId != null) 'dogId': dogId,
-      if (buddyId != null) 'buddyId': buddyId,
+      if (code != null) 'code': code,
+      if (dogs != null) 'dogs': dogs,
       if (sender != null) 'sender': sender,
-      if (timestamp != null) 'timestamp': timestamp,
+      if (time != null) 'time': time,
       if (message != null) 'message': message,
       if (attachment != null) 'attachment': attachment
     };

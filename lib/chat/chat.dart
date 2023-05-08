@@ -6,12 +6,11 @@
 //have delete option for chats
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:matchdotdog/dogs/all_buddies.dart';
+import 'package:matchdotdog/models/message_model.dart';
 import 'package:matchdotdog/user/home.dart';
 
-import '../models/chat_model.dart';
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';
 
@@ -36,12 +35,14 @@ class _ChatViewState extends State<ChatView> {
   final firestoreInstance = FirebaseFirestore.instance;
   late DocumentReference<Owner> ref;
   final _messageFormKey = GlobalKey<FormState>();
-
+  String _chatCode = '';
   final _messageTextController = TextEditingController();
   final _messageFocus = FocusNode();
   bool _isProcessing = false;
   bool _isSending = false;
   late Stream<QuerySnapshot> _chatStream;
+  late Stream<QuerySnapshot> _chatStream2;
+  late Stream<QuerySnapshot> _currentStream;
 
   void getBuddyOwner() async {
     ref =
@@ -72,11 +73,33 @@ class _ChatViewState extends State<ChatView> {
     //get buddy owner
     getBuddyOwner();
 
+    if (_currentDog.id.hashCode <= _buddy.id.hashCode) {
+      _chatCode =
+          _buddy.id.hashCode.toString() + _currentDog.id.hashCode.toString();
+    } else {
+      _chatCode =
+          _currentDog.id.hashCode.toString() + _buddy.id.hashCode.toString();
+    }
+
     _chatStream = FirebaseFirestore.instance
         .collection('chats')
-        .where('dogId', isEqualTo: _currentDog.id)
-        .where('buddyId', isEqualTo: _buddy.id)
+        .where('code',
+            isEqualTo: _buddy.id.hashCode.toString() +
+                _currentDog.id.hashCode.toString())
         .snapshots();
+
+    _chatStream2 = FirebaseFirestore.instance
+        .collection('chats')
+        .where('code',
+            isEqualTo: _currentDog.id.hashCode.toString() +
+                _buddy.id.hashCode.toString())
+        .snapshots();
+
+    if (_currentDog.id.hashCode <= _buddy.id.hashCode) {
+      _currentStream = _chatStream;
+    } else {
+      _currentStream = _chatStream2;
+    }
   }
 
   @override
@@ -129,7 +152,7 @@ class _ChatViewState extends State<ChatView> {
                         ],
                       ),
                       StreamBuilder<QuerySnapshot>(
-                        stream: _chatStream,
+                        stream: _currentStream,
                         builder: (BuildContext context,
                             AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasError) {
@@ -140,7 +163,6 @@ class _ChatViewState extends State<ChatView> {
                               ConnectionState.waiting) {
                             return const Text("Get this chat started!");
                           }
-
                           return Container(
                             child: Expanded(
                               child: Column(
@@ -149,23 +171,23 @@ class _ChatViewState extends State<ChatView> {
                                   ListView.builder(
                                     physics: const ScrollPhysics(),
                                     scrollDirection: Axis.vertical,
-                                    reverse: true,
+                                    reverse: false,
                                     shrinkWrap: true,
                                     itemCount: snapshot.data?.docs.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      Chat _chat = Chat.fromJson(
+                                      Message _message = Message.fromJson(
                                           snapshot.data?.docs[index]);
                                       return ListTile(
-                                        leading: _chat.sender == _buddy.owner
+                                        leading: _message.sender == _buddy.id
                                             ? CircleAvatar(
                                                 radius: 50,
                                                 backgroundImage:
                                                     NetworkImage(_buddy.photo),
                                               )
                                             : null,
-                                        trailing: _chat.sender ==
-                                                _currentUser.uid
+                                        trailing: _message.sender ==
+                                                _currentDog.id
                                             ? CircleAvatar(
                                                 radius: 50,
                                                 backgroundImage: NetworkImage(
@@ -173,9 +195,9 @@ class _ChatViewState extends State<ChatView> {
                                               )
                                             : null,
                                         title: Text(
-                                          _chat.message,
+                                          _message.message,
                                           textAlign:
-                                              _chat.sender == _currentUser.uid
+                                              _message.sender == _currentDog.id
                                                   ? TextAlign.end
                                                   : TextAlign.start,
                                         ),
@@ -214,20 +236,20 @@ class _ChatViewState extends State<ChatView> {
                                       setState(() {
                                         _isSending = true;
                                       });
-                                      String id = firestoreInstance
-                                          .collection("chats")
-                                          .doc()
-                                          .id;
+
+                                      String id = Timestamp.now()
+                                          .millisecondsSinceEpoch
+                                          .toString();
 
                                       firestoreInstance
-                                          .collection("chats")
+                                          .collection('chats')
                                           .doc(id)
                                           .set({
                                         "id": id,
-                                        "dogId": _currentDog.id,
-                                        "buddyId": _buddy.id,
-                                        "sender": _currentUser.uid,
-                                        "timestamp": Timestamp.now(),
+                                        "code": _chatCode,
+                                        "dogs": [_currentDog.id, _buddy.id],
+                                        "sender": _currentDog.id,
+                                        "time": Timestamp.now(),
                                         "message": _messageTextController.text,
                                         "attachment": ""
                                       });

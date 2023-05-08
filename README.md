@@ -79,6 +79,14 @@ Find a playmate for your puppy near you, and chat with friends to make the arran
 - requires \_currentOwner object
 
 - this page is primarily a viewer for
-  - dog list: a list of all your dogs
+  - my dogs page: a list of all your dogs
   - map view: a map showing other dogs nearby
-  - chat view: a list of all current chats
+    - not yet implimented
+  - chat page: a list of all current chats
+
+## My Dogs page
+
+- populates a list of dogs where their owner property is equal to your user id
+- add dogs with the '+' button, and be taken to the dog registration page
+
+* needs a delete dogs option
