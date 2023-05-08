@@ -121,7 +121,7 @@ class _AllBuddiesState extends State<AllBuddies> {
                                             HomePage(owner: _currentOwner)),
                                   );
                                 },
-                                icon: Icon(Icons.person)),
+                                icon: Icon(Icons.arrow_back_ios_new)),
                             IconButton(
                               iconSize: 50,
                               //check if _currentDog has liked this buddy or not

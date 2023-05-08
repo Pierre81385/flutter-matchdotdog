@@ -7,7 +7,7 @@ class Chat {
   String dogId;
   String buddyId;
   String sender;
-  Double timestamp;
+  Timestamp timestamp;
   String message;
   String attachment;
 
