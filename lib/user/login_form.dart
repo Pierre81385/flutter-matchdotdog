@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:matchdotdog/dogs/my_dogs_redirect.dart';
 import 'package:matchdotdog/dogs/register_my_dog.dart';
+import 'package:matchdotdog/user/reset.dart';
 
 import '../models/owner_model.dart';
 import 'fire_auth.dart';
@@ -109,6 +110,13 @@ class _LoginFormState extends State<LoginForm> {
               icon: Icon(Icons.key),
             ),
           ),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => PasswordReset()),
+                );
+              },
+              child: Text('I forgot my password.')),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
