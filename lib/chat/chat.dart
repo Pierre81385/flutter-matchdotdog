@@ -254,6 +254,11 @@ class _ChatViewState extends State<ChatView> {
                                         "attachment": ""
                                       });
 
+                                      firestoreInstance
+                                          .collection('dogs')
+                                          .doc(_currentDog.id)
+                                          .update({'chats': id});
+
                                       _messageTextController.text = "";
                                     },
                                     icon: Icon(

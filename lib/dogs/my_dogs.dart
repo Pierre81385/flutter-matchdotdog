@@ -58,35 +58,57 @@ class _MyDogsState extends State<MyDogs> {
                   itemCount: snapshot2.data?.docs.length,
                   itemBuilder: (BuildContext context, int index) {
                     Dog _dog = Dog.fromJson(snapshot2.data?.docs[index]);
-                    return ListTile(
-                      onLongPress: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  DogDetails(dog: _dog, owner: _currentOwner)
-                              //MyDogsRedirect(user: user)
-                              ),
-                        );
-                      },
-                      leading: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(_dog.photo),
-                      ),
-                      title: Text(_dog.name),
-                      subtitle: Text(
-                          (_dog.buddies.length.toString() as String) +
-                              " friends"),
-                      trailing: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AllBuddies(dog: _dog, owner: _currentOwner)
-                                //MyDogsRedirect(user: user)
-                                ),
-                          );
-                        },
-                        icon: Icon(Icons.pets),
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          onLongPress: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => DogDetails(
+                                      dog: _dog, owner: _currentOwner)
+                                  //MyDogsRedirect(user: user)
+                                  ),
+                            );
+                          },
+                          leading: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: NetworkImage(_dog.photo),
+                          ),
+                          title: Text(_dog.name),
+                          subtitle: Text(
+                              (_dog.buddies.length.toString() as String) +
+                                  " friends"),
+                          trailing: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => AllBuddies(
+                                        dog: _dog, owner: _currentOwner)
+                                    //MyDogsRedirect(user: user)
+                                    ),
+                              );
+                            },
+                            icon: Icon(Icons.pets),
+                          ),
+                        ),
                       ),
                     );
                   },

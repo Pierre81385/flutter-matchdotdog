@@ -66,48 +66,82 @@ class _AvatarUploadsState extends State<AvatarUploads> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        SizedBox(
-          height: 25,
-        ),
-        Center(
-          child: GestureDetector(
-            onTap: () {
-              _showPicker(context);
-            },
-            child: CircleAvatar(
-              radius: 52,
-              backgroundColor: Theme.of(context).splashColor,
-              child: _photo != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Image.file(
-                        _photo!,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.fitHeight,
-                      ),
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(125)),
-                      width: 100,
-                      height: 100,
-                      child: Icon(
-                        Icons.camera_enhance_rounded,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 25),
+      child: Form(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(
+              height: 25,
             ),
-          ),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  _showPicker(context);
+                },
+                child: CircleAvatar(
+                  radius: 52,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: _photo != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25),
+                                  topRight: Radius.circular(25),
+                                  bottomLeft: Radius.circular(25),
+                                  bottomRight: Radius.circular(25)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Image.file(
+                              _photo!,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(125),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          width: 100,
+                          height: 100,
+                          child: Icon(
+                            Icons.camera_enhance_rounded,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 25,
+            )
+          ],
         ),
-        SizedBox(
-          height: 25,
-        )
-      ],
+      ),
     );
   }
 

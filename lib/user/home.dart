@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:matchdotdog/chat/chat_menu.dart';
 import 'package:matchdotdog/dogs/my_dogs.dart';
 import 'package:matchdotdog/user/auth_page.dart';
 import '../models/owner_model.dart';
@@ -37,15 +38,15 @@ class _HomePageState extends State<HomePage> {
       AuthPage(),
       MyDogs(owner: _currentOwner),
       Icon(Icons.location_on_outlined),
-      Icon(
-        Icons.chat_bubble_outline,
-        size: 150,
-      ),
+      ChatMenu(owner: _currentOwner),
     ];
 
     return Scaffold(
       body: SafeArea(child: _bottomNavPages.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
+        unselectedLabelStyle: const TextStyle(
+            color: Color.fromARGB(255, 144, 211, 214), fontSize: 14),
+        unselectedItemColor: Theme.of(context).primaryColor,
         currentIndex: _selectedIndex, //New
         onTap: _onItemTapped,
         items: <BottomNavigationBarItem>[
@@ -60,40 +61,40 @@ class _HomePageState extends State<HomePage> {
                 },
                 icon: Icon(
                   Icons.arrow_back_ios_new,
-                  color: Colors.black,
+                  color: Theme.of(context).primaryColor,
                 )),
             label: 'Me',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.list,
-              color: Colors.black,
+              color: Theme.of(context).primaryColor,
             ),
             activeIcon: Icon(
               Icons.list,
-              color: Colors.amber,
+              color: Theme.of(context).splashColor,
             ),
             label: 'My Dogs',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.location_on,
-              color: Colors.black,
+              color: Theme.of(context).primaryColor,
             ),
             activeIcon: Icon(
               Icons.location_on,
-              color: Colors.amber,
+              color: Theme.of(context).splashColor,
             ),
             label: 'Map',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.chat_bubble_outline,
-              color: Colors.black,
+              color: Theme.of(context).primaryColor,
             ),
             activeIcon: Icon(
               Icons.chat_bubble_outline,
-              color: Colors.amber,
+              color: Theme.of(context).splashColor,
             ),
             label: 'Chats',
           ),

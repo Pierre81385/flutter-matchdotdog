@@ -15,7 +15,6 @@ class PasswordReset extends StatefulWidget {
 class _PasswordResetState extends State<PasswordReset> {
   final _emailTextController = TextEditingController();
   final _focusReset = FocusNode();
-  bool _sent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +22,7 @@ class _PasswordResetState extends State<PasswordReset> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _sent
-              ? Text('Password reset sent to your email!')
-              : Text('Need to reset your password?'),
+          Text('Need to reset your password?'),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(

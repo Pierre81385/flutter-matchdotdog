@@ -12,9 +12,9 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static const mainColor = Color.fromARGB(255, 94, 168, 172);
+  static const mainColor = Color.fromARGB(255, 144, 211, 214);
   static const secondaryColor = const Color(0xFFFBF7F4);
-  static const accentColor = Color.fromARGB(255, 250, 215, 60);
+  static const accentColor = Color.fromARGB(255, 243, 229, 164);
 
   // This widget is the root of your application.
   @override
@@ -33,8 +33,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: createMaterialColor(mainColor),
         primaryColor: mainColor,
         splashColor: accentColor,
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
               backgroundColor: mainColor, foregroundColor: Colors.white),
         ),
       ),
