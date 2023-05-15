@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:matchdotdog/chat/chat_menu.dart';
+import 'package:matchdotdog/chat/chat_menu_contd.dart';
 import 'package:matchdotdog/dogs/my_dogs.dart';
 import 'package:matchdotdog/user/auth_page.dart';
+import '../models/dog_model.dart';
 import '../models/owner_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,12 +19,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Owner _currentOwner;
-  int _selectedIndex = 1; //New
+  int _selectedIndex = 1;
+  bool _chatPage = false;
+  late Dog _chatBuddy; //New
 
   @override
   void initState() {
     super.initState();
     _currentOwner = widget.owner;
+    _chatPage = false;
   }
 
   @override
@@ -38,7 +43,21 @@ class _HomePageState extends State<HomePage> {
       AuthPage(),
       MyDogs(owner: _currentOwner),
       Icon(Icons.location_on_outlined),
-      ChatMenu(owner: _currentOwner),
+      _chatPage
+          ? ChatMenuContd(owner: _currentOwner, buddy: _chatBuddy)
+          : ChatMenu(
+              owner: _currentOwner,
+              next: (bool? value) {
+                setState(() {
+                  _chatPage = value!;
+                });
+              },
+              buddy: (Dog? value) {
+                setState(() {
+                  _chatBuddy = value!;
+                });
+              },
+            ),
     ];
 
     return Scaffold(

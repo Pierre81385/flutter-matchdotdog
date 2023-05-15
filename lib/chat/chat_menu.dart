@@ -10,9 +10,15 @@ import '../models/dog_model.dart';
 import '../models/owner_model.dart';
 
 class ChatMenu extends StatefulWidget {
-  const ChatMenu({super.key, required this.owner});
+  const ChatMenu(
+      {super.key,
+      required this.owner,
+      required this.next,
+      required this.buddy});
 
   final Owner owner;
+  final ValueChanged<Dog?> buddy;
+  final ValueChanged<bool?> next;
 
   @override
   State<ChatMenu> createState() => _ChatMenuState();
@@ -49,6 +55,7 @@ class _ChatMenuState extends State<ChatMenu> {
 
         return Column(
           children: [
+            Text('Start a chat with...'),
             ListView.builder(
               physics: const ScrollPhysics(),
               scrollDirection: Axis.vertical,
@@ -97,11 +104,13 @@ class _ChatMenuState extends State<ChatMenu> {
                               " friends"),
                       trailing: IconButton(
                         onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => ChatMenuContd(
-                                    owner: _currentOwner, buddy: _chatBuddy)),
-                          );
+                          widget.next(true);
+                          widget.buddy(_chatBuddy);
+                          // Navigator.of(context).pushReplacement(
+                          //   MaterialPageRoute(
+                          //       builder: (context) => ChatMenuContd(
+                          //           owner: _currentOwner, buddy: _chatBuddy)),
+                          // );
                         },
                         icon: Icon(Icons.chat),
                       ),

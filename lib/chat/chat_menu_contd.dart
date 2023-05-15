@@ -49,72 +49,76 @@ class _ChatMenuContdState extends State<ChatMenuContd> {
         }
 
         return Scaffold(
-          body: Column(
-            children: [
-              ListView.builder(
-                physics: const ScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                reverse: false,
-                shrinkWrap: true,
-                itemCount: snapshot.data?.docs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Dog _dog = Dog.fromJson(snapshot.data?.docs[index]);
+          body: SafeArea(
+            child: Column(
+              children: [
+                Text('Choose a dog to chat as...'),
+                ListView.builder(
+                  physics: const ScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  reverse: false,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data?.docs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Dog _dog = Dog.fromJson(snapshot.data?.docs[index]);
 
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        onLongPress: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    DogDetails(dog: _dog, owner: _currentOwner)
-                                //MyDogsRedirect(user: user)
-                                ),
-                          );
-                        },
-                        leading: CircleAvatar(
-                          radius: 50,
-                          backgroundImage: NetworkImage(_dog.photo),
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
                         ),
-                        title: Text(_dog.name),
-                        subtitle: Text(
-                            (_dog.buddies.length.toString() as String) +
-                                " friends"),
-                        trailing: IconButton(
-                          onPressed: () {
+                        child: ListTile(
+                          onLongPress: () {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: (context) => ChatView(
-                                      dog: _dog,
-                                      owner: _currentOwner,
-                                      buddy: _currentBuddy)),
+                                  builder: (context) => DogDetails(
+                                      dog: _dog, owner: _currentOwner)
+                                  //MyDogsRedirect(user: user)
+                                  ),
                             );
                           },
-                          icon: Icon(Icons.chat),
+                          leading: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: NetworkImage(_dog.photo),
+                          ),
+                          title: Text(_dog.name),
+                          subtitle: Text(
+                              (_dog.buddies.length.toString() as String) +
+                                  " friends"),
+                          trailing: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => ChatView(
+                                        dog: _dog,
+                                        owner: _currentOwner,
+                                        buddy: _currentBuddy)),
+                              );
+                            },
+                            icon: Icon(Icons.chat),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },
