@@ -96,8 +96,10 @@ class _ActivityFormState extends State<ActivityForm> {
                       //back to my dogs
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(owner: _currentOwner)),
+                            builder: (context) => HomePage(
+                                  owner: _currentOwner,
+                                  referrer: 'dogRegistration',
+                                )),
                       );
                     }
                   },

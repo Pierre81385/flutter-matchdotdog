@@ -40,7 +40,10 @@ class _DogDetailsState extends State<DogDetails> {
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                      builder: (context) => HomePage(owner: _currentOwner)
+                      builder: (context) => HomePage(
+                            owner: _currentOwner,
+                            referrer: 'details',
+                          )
                       //MyDogsRedirect(user: user)
                       ),
                 );

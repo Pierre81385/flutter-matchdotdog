@@ -9,9 +9,10 @@ import '../models/dog_model.dart';
 import '../models/owner_model.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.owner});
+  const HomePage({super.key, required this.owner, required this.referrer});
 
   final Owner owner;
+  final String referrer;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -22,12 +23,26 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
   bool _chatPage = false;
   late Dog _chatBuddy; //New
+  late String _currentReferrer;
 
   @override
   void initState() {
     super.initState();
+    _currentReferrer = widget.referrer;
     _currentOwner = widget.owner;
     _chatPage = false;
+
+    if (_currentReferrer == 'chatView_back') {
+      _selectedIndex = 3;
+    }
+
+    if (_currentReferrer == 'chatViewContd') {
+      _selectedIndex = 3;
+    }
+
+    if (_currentReferrer == 'chatView_profile') {
+      _selectedIndex = 1;
+    }
   }
 
   @override
@@ -79,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 icon: Icon(
-                  Icons.arrow_back_ios_new,
+                  Icons.exit_to_app_outlined,
                   color: Theme.of(context).primaryColor,
                 )),
             label: 'Me',

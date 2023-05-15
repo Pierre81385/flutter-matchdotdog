@@ -48,7 +48,10 @@ class _MyDogsRedirectState extends State<MyDogsRedirect> {
           );
         }
 
-        return HomePage(owner: _currentOwner);
+        return HomePage(
+          owner: _currentOwner,
+          referrer: 'redirect',
+        );
       },
     );
   }

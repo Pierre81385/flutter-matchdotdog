@@ -3,15 +3,20 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:matchdotdog/chat/chat.dart';
+import 'package:matchdotdog/chat/chat_menu_contd.dart';
 import 'package:matchdotdog/user/home.dart';
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';
 
 class AllBuddies extends StatefulWidget {
+  const AllBuddies({
+    super.key,
+    required this.owner,
+    required this.dog,
+  });
+
   final Owner owner;
   final Dog dog;
-
-  const AllBuddies({super.key, required this.owner, required this.dog});
 
   @override
   State<AllBuddies> createState() => _AllBuddiesState();
@@ -20,6 +25,7 @@ class AllBuddies extends StatefulWidget {
 class _AllBuddiesState extends State<AllBuddies> {
   late Owner _currentOwner;
   late Dog _currentDog;
+  late String _referrer;
   late Stream<QuerySnapshot> _allBuddiesStream;
   late Stream<DocumentSnapshot<Map<String, dynamic>>> _currentDogStream;
   late int _index;
@@ -152,8 +158,10 @@ class _AllBuddiesState extends State<AllBuddies> {
                                   onPressed: () {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              HomePage(owner: _currentOwner)),
+                                          builder: (context) => HomePage(
+                                                owner: _currentOwner,
+                                                referrer: 'allBuddies',
+                                              )),
                                     );
                                   },
                                   icon: Icon(Icons.arrow_back_ios_new)),
@@ -246,6 +254,7 @@ class _AllBuddiesState extends State<AllBuddies> {
                                                 owner: _currentOwner,
                                                 dog: _currentDog,
                                                 buddy: _currentBuddy,
+                                                referrer: 'allBuddies',
                                               )),
                                     );
                                   },

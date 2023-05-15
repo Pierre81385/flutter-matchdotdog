@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:matchdotdog/user/home.dart';
 
 import '../dogs/dog_details.dart';
 import '../models/dog_model.dart';
@@ -105,9 +106,11 @@ class _ChatMenuContdState extends State<ChatMenuContd> {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => ChatView(
-                                        dog: _dog,
-                                        owner: _currentOwner,
-                                        buddy: _currentBuddy)),
+                                          dog: _dog,
+                                          owner: _currentOwner,
+                                          buddy: _currentBuddy,
+                                          referrer: 'chatMenu',
+                                        )),
                               );
                             },
                             icon: Icon(Icons.chat),
@@ -116,6 +119,16 @@ class _ChatMenuContdState extends State<ChatMenuContd> {
                       ),
                     );
                   },
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => HomePage(
+                              owner: _currentOwner, referrer: 'chatViewContd')),
+                    );
+                  },
+                  icon: Icon(Icons.arrow_back_ios),
                 ),
               ],
             ),

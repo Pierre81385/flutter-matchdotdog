@@ -87,8 +87,9 @@ class _DogSummaryState extends State<DogSummary> {
                       //back to user registration
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(owner: _currentOwner)),
+                            builder: (context) => HomePage(
+                                owner: _currentOwner,
+                                referrer: 'dogRegistration')),
                       );
                     } else {
                       //back to my dogs
@@ -135,8 +136,9 @@ class _DogSummaryState extends State<DogSummary> {
 
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(owner: _currentOwner)),
+                            builder: (context) => HomePage(
+                                owner: _currentOwner,
+                                referrer: 'dogRegistration')),
                       );
                     },
                     child: Text('Submit')),

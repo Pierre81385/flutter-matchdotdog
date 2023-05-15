@@ -95,8 +95,9 @@ class _AgeFormState extends State<AgeForm> {
                       //back to my dogs
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(owner: _currentOwner)),
+                            builder: (context) => HomePage(
+                                owner: _currentOwner,
+                                referrer: 'dogRegistration')),
                       );
                     }
                   },

@@ -7,6 +7,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:matchdotdog/chat/chat_menu_contd.dart';
 import 'package:matchdotdog/dogs/all_buddies.dart';
 import 'package:matchdotdog/models/message_model.dart';
 import 'package:matchdotdog/user/home.dart';
@@ -16,11 +17,16 @@ import '../models/owner_model.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView(
-      {super.key, required this.dog, required this.owner, required this.buddy});
+      {super.key,
+      required this.dog,
+      required this.owner,
+      required this.buddy,
+      required this.referrer});
 
   final Dog dog;
   final Dog buddy;
   final Owner owner;
+  final String referrer;
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -43,6 +49,7 @@ class _ChatViewState extends State<ChatView> {
   late Stream<QuerySnapshot> _chatStream;
   late Stream<QuerySnapshot> _chatStream2;
   late Stream<QuerySnapshot> _currentStream;
+  late String _currentReferrer;
 
   void getBuddyOwner() async {
     ref =
@@ -62,6 +69,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
+    _currentReferrer = widget.referrer;
     _isSending = false;
     _isProcessing = true;
     //get current dog
@@ -124,12 +132,21 @@ class _ChatViewState extends State<ChatView> {
                               IconButton(
                                   color: Colors.black,
                                   onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) => AllBuddies(
-                                              owner: _currentUser,
-                                              dog: _currentDog)),
-                                    );
+                                    _currentReferrer == "allBuddies"
+                                        ? Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AllBuddies(
+                                                      owner: _currentUser,
+                                                      dog: _currentDog,
+                                                    )),
+                                          )
+                                        : Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (context) => HomePage(
+                                                    owner: _currentUser,
+                                                    referrer: 'chatView_back')),
+                                          );
                                   },
                                   icon: Icon(Icons.arrow_back_ios_new)),
                               CircleAvatar(
@@ -141,8 +158,10 @@ class _ChatViewState extends State<ChatView> {
                                   onPressed: () {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              HomePage(owner: _currentUser)),
+                                          builder: (context) => HomePage(
+                                                owner: _currentUser,
+                                                referrer: 'chatView_profile',
+                                              )),
                                     );
                                   },
                                   icon: Icon(Icons.person)),
