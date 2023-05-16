@@ -34,6 +34,7 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
       size: 0,
       activity: 0,
       age: 0,
+      description: "",
       buddies: []);
   late bool _nameForm;
   late bool _genderForm;
@@ -59,6 +60,7 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
         size: 0,
         activity: 0,
         age: 0,
+        description: "",
         buddies: []);
 
     _nameForm = true;

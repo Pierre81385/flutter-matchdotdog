@@ -55,7 +55,7 @@ class _AgeFormState extends State<AgeForm> {
     return Column(
       children: [
         Text("How old is your dog?"),
-        Text('Age ${_selectedAgeValue.round().toString()}'),
+        Text('${_selectedAgeValue.round().toString()} years old.'),
         Slider(
             //label: _selectedAgeValue.toString(),
             min: 0,

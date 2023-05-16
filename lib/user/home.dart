@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:matchdotdog/chat/chat_menu.dart';
 import 'package:matchdotdog/chat/chat_menu_contd.dart';
 import 'package:matchdotdog/dogs/my_dogs.dart';
+import 'package:matchdotdog/map/map.dart';
 import 'package:matchdotdog/user/auth_page.dart';
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';
@@ -57,7 +58,7 @@ class _HomePageState extends State<HomePage> {
     List<Widget> _bottomNavPages = <Widget>[
       AuthPage(),
       MyDogs(owner: _currentOwner),
-      Icon(Icons.location_on_outlined),
+      MapScreen(owner: _currentOwner),
       _chatPage
           ? ChatMenuContd(owner: _currentOwner, buddy: _chatBuddy)
           : ChatMenu(

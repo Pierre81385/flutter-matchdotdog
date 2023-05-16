@@ -114,6 +114,8 @@ class _DogSummaryState extends State<DogSummary> {
                       firestoreInstance.collection("dogs").doc(id).set({
                         "id": id,
                         "owner": _currentDog.owner,
+                        "owner_lat": _currentOwner.locationLat,
+                        "owner_long": _currentOwner.locationLong,
                         "name": _currentDog.name,
                         "photo": _currentDog.photo,
                         "activity": _currentDog.activity,

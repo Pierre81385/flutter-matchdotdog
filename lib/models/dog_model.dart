@@ -9,6 +9,7 @@ class Dog {
   double size;
   double activity;
   double age;
+  String description;
   List<dynamic> buddies;
 
   Dog(
@@ -20,6 +21,7 @@ class Dog {
       required this.size,
       required this.activity,
       required this.age,
+      required this.description,
       required this.buddies});
 
   Dog.fromJson(QueryDocumentSnapshot<Object?>? json)
@@ -31,6 +33,7 @@ class Dog {
         size = json['size'],
         activity = json['activity'],
         age = json['age'],
+        description = json['description'],
         buddies = json['buddies'];
 
   factory Dog.fromFirestore(
@@ -47,6 +50,7 @@ class Dog {
         size: data?['size'],
         activity: data?['activity'],
         age: data?['age'],
+        description: data?['description'],
         buddies: data?['buddies']);
   }
 
@@ -60,6 +64,7 @@ class Dog {
       if (size != null) "size": size,
       if (activity != null) "activity": activity,
       if (age != null) "age": age,
+      if (description != null) "description": description,
       if (buddies != null) "buddies": buddies
     };
   }

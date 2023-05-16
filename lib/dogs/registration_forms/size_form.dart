@@ -55,7 +55,17 @@ class _SizeFormState extends State<SizeForm> {
     return Column(
       children: [
         Text('How big is your dog?'),
-        Text('Size ${_selectedSizeValue.round().toString()}'),
+        _selectedSizeValue <= 5
+            ? Text('Size extra-smol.')
+            : _selectedSizeValue > 5 && _selectedSizeValue <= 10
+                ? Text('Size s\'medium.')
+                : _selectedSizeValue > 10 && _selectedSizeValue <= 15
+                    ? Text('Size medium.')
+                    : _selectedSizeValue > 15 && _selectedSizeValue <= 20
+                        ? Text('Size large')
+                        : _selectedSizeValue > 20 && _selectedSizeValue <= 24
+                            ? Text('Size XL')
+                            : Text('Size BIG'),
         Slider(
             //label: _selectedAgeValue.toString(),
             min: 0,
