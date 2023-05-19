@@ -2,6 +2,18 @@
 
 A new Flutter project.
 
+Create a profile and a profile for each of your dogs.
+
+Provide information about each dogs attributes, then find dogs to meet up with.
+
+From the home screen, see a list of your dogs search for buddies for them.
+
+See other dogs near you on a map.
+
+Start a chat between other dog owners.
+
+Make your dog some friends!
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

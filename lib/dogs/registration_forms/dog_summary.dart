@@ -66,6 +66,7 @@ class _DogSummaryState extends State<DogSummary> {
         Text(_currentDog.age.toString()),
         Text(_currentDog.gender.toString()),
         Text(_currentDog.size.toString()),
+        Text(_currentDog.description),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -114,8 +115,8 @@ class _DogSummaryState extends State<DogSummary> {
                       firestoreInstance.collection("dogs").doc(id).set({
                         "id": id,
                         "owner": _currentDog.owner,
-                        "owner_lat": _currentOwner.locationLat,
-                        "owner_long": _currentOwner.locationLong,
+                        "ownerLat": _currentOwner.locationLat,
+                        "ownerLong": _currentOwner.locationLong,
                         "name": _currentDog.name,
                         "photo": _currentDog.photo,
                         "activity": _currentDog.activity,
@@ -123,6 +124,7 @@ class _DogSummaryState extends State<DogSummary> {
                         "gender": _currentDog.gender,
                         "size": _currentDog.size,
                         "buddies": [],
+                        "description": _currentDog.description
                       });
 
                       firestoreInstance

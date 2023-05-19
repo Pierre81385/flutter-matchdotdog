@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Dog {
   String id;
   String owner;
+  double ownerLat;
+  double ownerLong;
   String photo;
   String name;
   int gender;
@@ -15,6 +17,8 @@ class Dog {
   Dog(
       {required this.id,
       required this.owner,
+      required this.ownerLat,
+      required this.ownerLong,
       required this.photo,
       required this.name,
       required this.gender,
@@ -27,6 +31,8 @@ class Dog {
   Dog.fromJson(QueryDocumentSnapshot<Object?>? json)
       : id = json!['id'],
         owner = json!['owner'],
+        ownerLat = json!['ownerLat'],
+        ownerLong = json!['ownerLong'],
         photo = json['photo'],
         name = json['name'],
         gender = json['gender'],
@@ -44,6 +50,8 @@ class Dog {
     return Dog(
         id: data?['id'],
         owner: data?['owner'],
+        ownerLat: data?['ownerLat'],
+        ownerLong: data?['ownerLong'],
         photo: data?['photo'],
         name: data?['name'],
         gender: data?['gender'],
@@ -58,6 +66,8 @@ class Dog {
     return {
       if (id != null) "id": id,
       if (owner != null) "owner": owner,
+      if (ownerLat != null) "ownerLat": ownerLat,
+      if (ownerLong != null) "ownerLong": ownerLong,
       if (photo != null) "photo": photo,
       if (name != null) "name": name,
       if (gender != null) "gender": gender,

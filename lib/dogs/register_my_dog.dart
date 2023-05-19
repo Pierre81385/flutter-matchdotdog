@@ -28,6 +28,8 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
   late Dog _currentDog = Dog(
       id: "",
       owner: _currentOwner.uid,
+      ownerLat: _currentOwner.locationLat,
+      ownerLong: _currentOwner.locationLong,
       photo: "",
       name: "",
       gender: 0,
@@ -54,6 +56,8 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
     _currentDog = Dog(
         id: "",
         owner: _currentOwner.uid,
+        ownerLat: _currentOwner.locationLat,
+        ownerLong: _currentOwner.locationLong,
         photo: "",
         name: "",
         gender: 0,

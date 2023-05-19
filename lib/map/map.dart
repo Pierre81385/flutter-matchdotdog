@@ -27,8 +27,8 @@ class _MapScreenState extends State<MapScreen> {
     _index = 0;
 
     _allBuddiesStream = FirebaseFirestore.instance
-        .collection('owners')
-        .where('uid', isNotEqualTo: _currentOwner.uid)
+        .collection('dogs')
+        .where('owner', isNotEqualTo: _currentOwner.uid)
         .snapshots();
     _initialLocation =
         LatLng(_currentOwner.locationLat, _currentOwner.locationLong);
@@ -37,24 +37,40 @@ class _MapScreenState extends State<MapScreen> {
 // ToDo: add custom marker
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: _initialLocation,
-          zoom: 14,
-        ),
-        markers: {
-          Marker(
-            markerId: const MarkerId("Me"),
-            position: _initialLocation,
-            draggable: true,
-            onDragEnd: (value) {
-              // value is the new position
-            },
-            // To do: custom marker icon
+    return StreamBuilder<QuerySnapshot>(
+      stream: _allBuddiesStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text('Loading...');
+        }
+
+        final markers = snapshot.data!.docs.map((DocumentSnapshot document) {
+          final lat = document['ownerLat'];
+          final lng = document['ownerLong'];
+          final title = document['name'];
+          final markerId = MarkerId(document['id']);
+
+          return Marker(
+            markerId: markerId,
+            position: LatLng(lat, lng),
+            infoWindow: InfoWindow(title: title),
+          );
+        }).toList();
+
+        return Scaffold(
+          body: GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _initialLocation,
+              zoom: 14,
+            ),
+            markers: Set<Marker>.from(markers),
           ),
-        },
-      ),
+        );
+      },
     );
   }
 }
