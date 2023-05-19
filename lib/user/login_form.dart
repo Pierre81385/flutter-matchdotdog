@@ -233,6 +233,23 @@ class _LoginFormState extends State<LoginForm> {
                                   print(
                                       'owner doc updated with current position!');
 
+                                  if (_owner.dogs.length > 0) {
+                                    for (var i = 0;
+                                        i < _owner.dogs.length;
+                                        i++) {
+                                      FirebaseFirestore.instance
+                                          .collection('dogs')
+                                          .doc(_owner.dogs[i])
+                                          .update({
+                                        'ownerLat': _owner.locationLat,
+                                        'ownerLong': _owner.locationLong
+                                      });
+                                    }
+
+                                    print(
+                                        'dog doc updated with current position!');
+                                  }
+
                                   if (_owner != null) {
                                     print('found owner:');
                                     print(_owner);
@@ -247,9 +264,7 @@ class _LoginFormState extends State<LoginForm> {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            MyDogsRedirect(owner: _owner)
-                                        //MyDogsRedirect(user: user)
-                                        ),
+                                            MyDogsRedirect(owner: _owner)),
                                   );
                                 }
                               }
