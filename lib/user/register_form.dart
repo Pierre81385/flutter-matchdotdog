@@ -211,11 +211,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(10, 25, 10, 0),
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    _getCurrentPosition();
-                                  },
-                                  child: Text('Enable Location Services'),
+                                child: Column(
+                                  children: [
+                                    Text('*required'),
+                                    OutlinedButton(
+                                      onPressed: () {
+                                        _getCurrentPosition();
+                                      },
+                                      child: Text('Enable Location Services'),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

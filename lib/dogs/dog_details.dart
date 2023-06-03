@@ -30,28 +30,95 @@ class _DogDetailsState extends State<DogDetails> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(child: Text(_currentDog.name)),
-          Center(
-            child: OutlinedButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                      builder: (context) => HomePage(
-                            owner: _currentOwner,
-                            referrer: 'details',
-                          )
-                      //MyDogsRedirect(user: user)
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
                       ),
-                );
-              },
-              child: Icon(Icons.arrow_back_ios),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      _currentDog.photo,
+                      width: width,
+                      height: height,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(24),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.grey.withOpacity(0.5),
+                        //     spreadRadius: 5,
+                        //     blurRadius: 7,
+                        //     offset:
+                        //         Offset(0, 3), // changes position of shadow
+                        //   ),
+                        // ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              color: Colors.black,
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage(
+                                            owner: _currentOwner,
+                                            referrer: 'allBuddies',
+                                          )),
+                                );
+                              },
+                              icon: Icon(Icons.arrow_back_ios_new)),
+                          Column(
+                            children: [
+                              Text(
+                                _currentDog.name,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
