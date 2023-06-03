@@ -12,9 +12,9 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static const mainColor = Color.fromARGB(255, 144, 211, 214);
+  static const mainColor = Color.fromARGB(255, 0, 0, 0);
   static const secondaryColor = const Color(0xFFFBF7F4);
-  static const accentColor = Color.fromARGB(255, 243, 229, 164);
+  static const accentColor = Color.fromARGB(255, 243, 198, 0);
 
   // This widget is the root of your application.
   @override

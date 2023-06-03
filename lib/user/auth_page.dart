@@ -21,28 +21,40 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            child: _selection == true
-                ? LoginForm(
-                    onSelect: (value) {
-                      setState(() {
-                        _selection = value!;
-                      });
-                    },
-                  )
-                : RegistrationForm(
-                    onSelect: (value) {
-                      setState(() {
-                        _selection = value!;
-                      });
-                    },
-                  ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/mainWallpaper.png'),
+            fit: BoxFit.cover,
           ),
-        ],
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                child: _selection == true
+                    ? LoginForm(
+                        onSelect: (value) {
+                          setState(() {
+                            _selection = value!;
+                          });
+                        },
+                      )
+                    : RegistrationForm(
+                        onSelect: (value) {
+                          setState(() {
+                            _selection = value!;
+                          });
+                        },
+                      ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

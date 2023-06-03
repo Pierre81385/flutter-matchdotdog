@@ -97,210 +97,223 @@ class _RegistrationFormState extends State<RegistrationForm> {
       return Colors.red;
     }
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Form(
-        key: _registerFormKey,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        topRight: Radius.circular(25),
-                        bottomLeft: Radius.circular(25),
-                        bottomRight: Radius.circular(25)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      AvatarUploads(
-                        onSelect: (value) {
-                          setState(() {
-                            _avatarPhoto = value!;
-                          });
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 25),
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: _nameRegisterTextController,
-                              focusNode: _focusRegisterName,
-                              validator: (value) => Validator.validateName(
-                                name: value,
-                              ),
-                              decoration: const InputDecoration(
-                                  labelText: 'User Name',
-                                  fillColor: Colors.white,
-                                  icon: Icon(Icons.add)),
-                            ),
-                            TextFormField(
-                              controller: _emailRegisterTextController,
-                              focusNode: _focusRegisterEmail,
-                              validator: (value) => Validator.validateEmail(
-                                email: value,
-                              ),
-                              decoration: const InputDecoration(
-                                labelText: 'Email',
-                                fillColor: Colors.white,
-                                icon: Icon(Icons.email),
-                              ),
-                            ),
-                            TextFormField(
-                              controller: _passwordRegisterTextController1,
-                              focusNode: _focusRegisterPassword1,
-                              validator: (value) => Validator.validatePassword(
-                                password: value,
-                              ),
-                              decoration: const InputDecoration(
-                                labelText: 'Password',
-                                fillColor: Colors.white,
-                                icon: Icon(Icons.key),
-                              ),
-                            ),
-                            TextFormField(
-                              controller: _passwordRegisterTextController2,
-                              focusNode: _focusRegisterPassword2,
-                              validator: (value) => Validator.validatePassword(
-                                password: value,
-                              ),
-                              decoration: const InputDecoration(
-                                labelText: 'Verify Password',
-                                fillColor: Colors.white,
-                                icon: Icon(Icons.key),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  _getCurrentPosition();
-                                },
-                                child: Text('Enable Location Services'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: OutlinedButton(
-                        onPressed: () {
-                          widget.onSelect(_selection);
-                        },
-                        child: Text("I already have an account."),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: _isProcessing
-                          ? const CircularProgressIndicator()
-                          : OutlinedButton(
-                              onPressed: () async {
-                                _focusRegisterName.unfocus();
-                                _focusRegisterEmail.unfocus();
-                                _focusRegisterPassword1.unfocus();
-                                _focusRegisterPassword2.unfocus();
-
-                                if (_registerFormKey.currentState!.validate()) {
-                                  setState(() {
-                                    _isProcessing = true;
-                                  });
-                                }
-
-                                if (_registerFormKey.currentState!.validate()) {
-                                  //create user in Firebase Auth
-                                  User? user =
-                                      await FireAuth.registerUsingEmailPassword(
-                                    name: _nameRegisterTextController.text,
-                                    email: _emailRegisterTextController.text,
-                                    password:
-                                        _passwordRegisterTextController2.text,
-                                  );
-
-                                  _owner = Owner(
-                                    uid: user?.uid as String,
-                                    name: _nameRegisterTextController.text,
-                                    email: _emailRegisterTextController.text,
-                                    avatar: _avatarPhoto,
-                                    locationLat: _userPosition.latitude,
-                                    locationLong: _userPosition.longitude,
-                                    dogs: [],
-                                    //friends: []
-                                  );
-
-                                  Map<String, dynamic> map = {
-                                    'uid': _owner.uid,
-                                    'name': _owner.name,
-                                    'email': _owner.email,
-                                    'avatar': _owner.avatar,
-                                    'locationLat': _owner.locationLat,
-                                    'locationLong': _owner.locationLong,
-                                    'dogs': _owner.dogs,
-                                    //'friends': _owner.friends
-                                  };
-
-                                  firestoreInstance
-                                      .collection('owners')
-                                      .doc(_owner.uid)
-                                      .set(map)
-                                      .whenComplete(
-                                          () => _isProcessing = false);
-
-                                  if (user != null) {
-                                    print(
-                                        'Sending user information to dog registration page!');
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                        builder: (context) => RegisterMyDog(
-                                          owner: _owner,
-                                          referrer: 'register',
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                }
-                              },
-                              child: Text('Register')),
-                    ),
-                  ],
+    return GestureDetector(
+      onTap: () {
+        _focusRegisterName.unfocus();
+        _focusRegisterEmail.unfocus();
+        _focusRegisterPassword1.unfocus();
+        _focusRegisterPassword2.unfocus();
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Form(
+          key: _registerFormKey,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
                 ),
               ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(25),
+                          topRight: Radius.circular(25),
+                          bottomLeft: Radius.circular(25),
+                          bottomRight: Radius.circular(25)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        AvatarUploads(
+                          onSelect: (value) {
+                            setState(() {
+                              _avatarPhoto = value!;
+                            });
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 25),
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: _nameRegisterTextController,
+                                focusNode: _focusRegisterName,
+                                validator: (value) => Validator.validateName(
+                                  name: value,
+                                ),
+                                decoration: const InputDecoration(
+                                    labelText: 'User Name',
+                                    fillColor: Colors.white,
+                                    icon: Icon(Icons.add)),
+                              ),
+                              TextFormField(
+                                controller: _emailRegisterTextController,
+                                focusNode: _focusRegisterEmail,
+                                validator: (value) => Validator.validateEmail(
+                                  email: value,
+                                ),
+                                decoration: const InputDecoration(
+                                  labelText: 'Email',
+                                  fillColor: Colors.white,
+                                  icon: Icon(Icons.email),
+                                ),
+                              ),
+                              TextFormField(
+                                controller: _passwordRegisterTextController1,
+                                focusNode: _focusRegisterPassword1,
+                                validator: (value) =>
+                                    Validator.validatePassword(
+                                  password: value,
+                                ),
+                                decoration: const InputDecoration(
+                                  labelText: 'Password',
+                                  fillColor: Colors.white,
+                                  icon: Icon(Icons.key),
+                                ),
+                              ),
+                              TextFormField(
+                                controller: _passwordRegisterTextController2,
+                                focusNode: _focusRegisterPassword2,
+                                validator: (value) =>
+                                    Validator.validatePassword(
+                                  password: value,
+                                ),
+                                decoration: const InputDecoration(
+                                  labelText: 'Verify Password',
+                                  fillColor: Colors.white,
+                                  icon: Icon(Icons.key),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 25, 10, 0),
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    _getCurrentPosition();
+                                  },
+                                  child: Text('Enable Location Services'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: OutlinedButton(
+                          onPressed: () {
+                            widget.onSelect(_selection);
+                          },
+                          child: Text("I already have an account."),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _isProcessing
+                            ? const CircularProgressIndicator()
+                            : OutlinedButton(
+                                onPressed: () async {
+                                  _focusRegisterName.unfocus();
+                                  _focusRegisterEmail.unfocus();
+                                  _focusRegisterPassword1.unfocus();
+                                  _focusRegisterPassword2.unfocus();
+
+                                  if (_registerFormKey.currentState!
+                                      .validate()) {
+                                    setState(() {
+                                      _isProcessing = true;
+                                    });
+                                  }
+
+                                  if (_registerFormKey.currentState!
+                                      .validate()) {
+                                    //create user in Firebase Auth
+                                    User? user = await FireAuth
+                                        .registerUsingEmailPassword(
+                                      name: _nameRegisterTextController.text,
+                                      email: _emailRegisterTextController.text,
+                                      password:
+                                          _passwordRegisterTextController2.text,
+                                    );
+
+                                    _owner = Owner(
+                                      uid: user?.uid as String,
+                                      name: _nameRegisterTextController.text,
+                                      email: _emailRegisterTextController.text,
+                                      avatar: _avatarPhoto,
+                                      locationLat: _userPosition.latitude,
+                                      locationLong: _userPosition.longitude,
+                                      dogs: [],
+                                      //friends: []
+                                    );
+
+                                    Map<String, dynamic> map = {
+                                      'uid': _owner.uid,
+                                      'name': _owner.name,
+                                      'email': _owner.email,
+                                      'avatar': _owner.avatar,
+                                      'locationLat': _owner.locationLat,
+                                      'locationLong': _owner.locationLong,
+                                      'dogs': _owner.dogs,
+                                      //'friends': _owner.friends
+                                    };
+
+                                    firestoreInstance
+                                        .collection('owners')
+                                        .doc(_owner.uid)
+                                        .set(map)
+                                        .whenComplete(
+                                            () => _isProcessing = false);
+
+                                    if (user != null) {
+                                      print(
+                                          'Sending user information to dog registration page!');
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) => RegisterMyDog(
+                                            owner: _owner,
+                                            referrer: 'register',
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                                child: Text('Register')),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

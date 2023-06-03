@@ -82,198 +82,188 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Form(
-        key: _loginFormKey,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                      bottomLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
+    return GestureDetector(
+      onTap: () {
+        _focusLoginEmail.unfocus();
+        _focusLoginPassword.unfocus();
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Form(
+          key: _loginFormKey,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: _emailLoginTextController,
-                          focusNode: _focusLoginEmail,
-                          validator: (value) => Validator.validateEmail(
-                            email: value,
-                          ),
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            fillColor: Colors.white,
-                            icon: Icon(Icons.email),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 8, 8, 25),
-                        child: TextFormField(
-                          controller: _passwordLoginTextController,
-                          focusNode: _focusLoginPassword,
-                          validator: (value) => Validator.validatePassword(
-                            password: value,
-                          ),
-                          decoration: const InputDecoration(
-                            labelText: 'Password',
-                            fillColor: Colors.white,
-                            icon: Icon(Icons.key),
-                          ),
-                        ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25),
+                        bottomLeft: Radius.circular(25),
+                        bottomRight: Radius.circular(25)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
                       ),
                     ],
                   ),
-                ),
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => PasswordReset()),
-                    );
-                  },
-                  child: Text('I forgot my password.')),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
+                  child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: OutlinedButton(
-                      onPressed: () {
-                        widget.onSelect(_selection);
-                      },
-                      child: const Text("I'm a new user"),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: _emailLoginTextController,
+                            focusNode: _focusLoginEmail,
+                            validator: (value) => Validator.validateEmail(
+                              email: value,
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Email',
+                              fillColor: Colors.white,
+                              icon: Icon(Icons.email),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 25),
+                          child: TextFormField(
+                            controller: _passwordLoginTextController,
+                            focusNode: _focusLoginPassword,
+                            validator: (value) => Validator.validatePassword(
+                              password: value,
+                            ),
+                            decoration: const InputDecoration(
+                              labelText: 'Password',
+                              fillColor: Colors.white,
+                              icon: Icon(Icons.key),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _isProcessing
-                        ? CircularProgressIndicator()
-                        : OutlinedButton(
-                            onPressed: () async {
-                              setState(() {
-                                _isProcessing = true;
-                              });
-
-                              _focusLoginEmail.unfocus();
-                              _focusLoginPassword.unfocus();
-
-                              if (_loginFormKey.currentState!.validate()) {
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => PasswordReset()),
+                      );
+                    },
+                    child: Text('I forgot my password.')),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: OutlinedButton(
+                        onPressed: () {
+                          widget.onSelect(_selection);
+                        },
+                        child: const Text("I'm a new user"),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _isProcessing
+                          ? CircularProgressIndicator()
+                          : OutlinedButton(
+                              onPressed: () async {
                                 setState(() {
                                   _isProcessing = true;
                                 });
 
-                                User? user =
-                                    await FireAuth.signInUsingEmailPassword(
-                                  email: _emailLoginTextController.text,
-                                  password: _passwordLoginTextController.text,
-                                );
+                                _focusLoginEmail.unfocus();
+                                _focusLoginPassword.unfocus();
 
-                                if (user != null) {
-                                  print("User is successfully logged in!");
-
-                                  final ref = firestoreInstance
-                                      .collection("owners")
-                                      .doc(user.uid)
-                                      .withConverter(
-                                        fromFirestore: Owner.fromFirestore,
-                                        toFirestore: (Owner owner, _) =>
-                                            owner.toFirestore(),
-                                      );
-
-                                  final docSnap = await ref.get();
-
-                                  _owner = docSnap.data()!;
-
-                                  _getCurrentPosition();
-
-                                  FirebaseFirestore.instance
-                                      .collection('owners')
-                                      .doc(_owner.uid)
-                                      .update({
-                                    'locationLat': _owner.locationLat,
-                                    'locationLong': _owner.locationLong
+                                if (_loginFormKey.currentState!.validate()) {
+                                  setState(() {
+                                    _isProcessing = true;
                                   });
 
-                                  print(
-                                      'owner doc updated with current position!');
+                                  User? user =
+                                      await FireAuth.signInUsingEmailPassword(
+                                    email: _emailLoginTextController.text,
+                                    password: _passwordLoginTextController.text,
+                                  );
 
-                                  if (_owner.dogs.length > 0) {
-                                    for (var i = 0;
-                                        i < _owner.dogs.length;
-                                        i++) {
-                                      FirebaseFirestore.instance
-                                          .collection('dogs')
-                                          .doc(_owner.dogs[i])
-                                          .update({
-                                        'ownerLat': _owner.locationLat,
-                                        'ownerLong': _owner.locationLong
-                                      });
-                                    }
+                                  if (user != null) {
+                                    print("User is successfully logged in!");
+
+                                    final ref = firestoreInstance
+                                        .collection("owners")
+                                        .doc(user.uid)
+                                        .withConverter(
+                                          fromFirestore: Owner.fromFirestore,
+                                          toFirestore: (Owner owner, _) =>
+                                              owner.toFirestore(),
+                                        );
+
+                                    final docSnap = await ref.get();
+
+                                    _owner = docSnap.data()!;
+
+                                    _getCurrentPosition();
+
+                                    FirebaseFirestore.instance
+                                        .collection('owners')
+                                        .doc(_owner.uid)
+                                        .update({
+                                      'locationLat': _owner.locationLat,
+                                      'locationLong': _owner.locationLong
+                                    });
 
                                     print(
-                                        'dog doc updated with current position!');
+                                        'owner doc updated with current position!');
+
+                                    if (_owner != null) {
+                                      print('found owner:');
+                                      print(_owner);
+                                    } else {
+                                      print("No such document.");
+                                    }
+
+                                    setState(() {
+                                      _isProcessing = false;
+                                    });
+
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MyDogsRedirect(owner: _owner)),
+                                    );
                                   }
-
-                                  if (_owner != null) {
-                                    print('found owner:');
-                                    print(_owner);
-                                  } else {
-                                    print("No such document.");
-                                  }
-
-                                  setState(() {
-                                    _isProcessing = false;
-                                  });
-
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            MyDogsRedirect(owner: _owner)),
-                                  );
                                 }
-                              }
-                            },
-                            child: Text('Login')),
-                  ),
-                ],
-              ),
-            ]),
+                              },
+                              child: Text('Login')),
+                    ),
+                  ],
+                ),
+              ]),
+            ),
           ),
         ),
       ),
