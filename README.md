@@ -50,7 +50,7 @@ Find a playmate for your puppy near you, and chat with friends to make the arran
 
 ## login/register page
 
-![login gif](/Users/peterbishop/Development/matchdotdog/assets/gifs/login.gif)
+![login gif](https://github.com/Pierre81385/matchdotdog/blob/main/assets/gifs/login.gif)
 
 - the \_currentOwner object is created here
 
