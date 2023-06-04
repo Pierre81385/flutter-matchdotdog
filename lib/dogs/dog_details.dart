@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:matchdotdog/dogs/details/my_dogs_details.dart';
 import 'package:matchdotdog/user/home.dart';
 
+import '../chat/chat_menu.dart';
+import '../chat/chat_menu_contd.dart';
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';
 import 'my_dogs.dart';
@@ -20,11 +23,17 @@ class DogDetails extends StatefulWidget {
 class _DogDetailsState extends State<DogDetails> {
   late Dog _currentDog;
   late Owner _currentOwner;
+  bool _showDetails = false;
+  bool _chatPage = false;
+  late Dog _chatBuddy;
 
   @override
   void initState() {
     _currentDog = widget.dog;
+    _showDetails = false;
     _currentOwner = widget.owner;
+    _chatPage = false;
+
     super.initState();
   }
 
@@ -87,27 +96,84 @@ class _DogDetailsState extends State<DogDetails> {
                         //   ),
                         // ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
                         children: [
-                          IconButton(
-                              color: Colors.black,
-                              onPressed: () {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => HomePage(
-                                            owner: _currentOwner,
-                                            referrer: 'allBuddies',
-                                          )),
-                                );
-                              },
-                              icon: Icon(Icons.arrow_back_ios_new)),
-                          Column(
+                          _showDetails
+                              ? IconButton(
+                                  color: Colors.black,
+                                  onPressed: () {
+                                    setState(() {
+                                      _showDetails = false;
+                                    });
+                                  },
+                                  icon: Icon(Icons.keyboard_arrow_down))
+                              : IconButton(
+                                  color: Colors.black,
+                                  onPressed: () {
+                                    setState(() {
+                                      _showDetails = true;
+                                    });
+                                  },
+                                  icon: Icon(Icons.keyboard_arrow_up)),
+                          _showDetails
+                              ? MyDogsDetails(dog: _currentDog)
+                              : SizedBox(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                _currentDog.name,
-                                style: TextStyle(color: Colors.black),
+                              IconButton(
+                                  color: Colors.black,
+                                  onPressed: () {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage(
+                                                owner: _currentOwner,
+                                                referrer: 'allBuddies',
+                                              )),
+                                    );
+                                  },
+                                  icon: Icon(Icons.arrow_back_ios_new)),
+                              Column(
+                                children: [
+                                  Text(
+                                    _currentDog.name,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  IconButton(
+                                    iconSize: 50,
+                                    //check if _currentDog has liked this buddy or not
+                                    color: Colors.red,
+                                    icon: const Icon(Icons.pets_rounded),
+                                    onPressed: () {},
+                                  ),
+                                ],
                               ),
+                              IconButton(
+                                  color: Colors.black,
+                                  onPressed: () {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) => _chatPage
+                                            ? ChatMenuContd(
+                                                owner: _currentOwner,
+                                                buddy: _chatBuddy)
+                                            : ChatMenu(
+                                                owner: _currentOwner,
+                                                next: (bool? value) {
+                                                  setState(() {
+                                                    _chatPage = value!;
+                                                  });
+                                                },
+                                                buddy: (Dog? value) {
+                                                  setState(() {
+                                                    _chatBuddy = value!;
+                                                  });
+                                                },
+                                              ),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.chat)),
                             ],
                           ),
                         ],
