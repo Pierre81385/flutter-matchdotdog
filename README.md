@@ -50,7 +50,7 @@ Find a playmate for your puppy near you, and chat with friends to make the arran
 
 ## login/register page
 
-![login gif](https://github.com/Pierre81385/matchdotdog/blob/main/assets/gifs/login.gif)
+![login gif](https://github.com/Pierre81385/matchdotdog/blob/main/assets/gifs/login.gif) ![registration](https://github.com/Pierre81385/matchdotdog/blob/main/assets/gifs/register.gif)
 
 - the \_currentOwner object is created here
 
@@ -92,7 +92,11 @@ Find a playmate for your puppy near you, and chat with friends to make the arran
 
 ## Dog Registration Page
 
+![dog registration](https://github.com/Pierre81385/matchdotdog/blob/main/assets/gifs/register_dog.gif)
+
 ## Home Page
+
+![home page](https://github.com/Pierre81385/matchdotdog/blob/main/assets/gifs/home_summary.gif)
 
 - requires \_currentOwner object
 
@@ -109,9 +113,15 @@ Find a playmate for your puppy near you, and chat with friends to make the arran
 * needs UI for dog details page
 * needs an edit/delete dogs option
 
+## All Dogs Page
+
+![all dogs](https://github.com/Pierre81385/matchdotdog/blob/main/assets/gifs/friend.gif)
+
 ## Map Page
 
 - populates a map with markers for dogs to show who's nearby
 - map generate with the Google Maps API
 
 ## Chat Page
+
+![chat](https://github.com/Pierre81385/matchdotdog/blob/main/assets/gifs/chat_response.gif)
