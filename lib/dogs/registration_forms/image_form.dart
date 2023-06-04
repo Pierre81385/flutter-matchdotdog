@@ -55,6 +55,7 @@ class _ImageFormState extends State<ImageForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         DogImageUploads(
           onSelect: (value) {

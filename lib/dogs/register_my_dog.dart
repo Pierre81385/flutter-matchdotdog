@@ -79,142 +79,145 @@ class _RegisterMyDogState extends State<RegisterMyDog> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _nameForm
-              ? NameForm(
-                  onSelect: (value) {
-                    setState(() {
-                      _nameForm = value!;
-                      _genderForm = true;
-                    });
-                  },
-                  onSubmit: (value) {
-                    setState(() {
-                      _currentDog.name = value;
-                      print(_currentDog.name);
-                    });
-                  },
-                  referrer: _currentReferrer,
-                  owner: _currentOwner,
-                )
-              : _genderForm
-                  ? GenderForm(
-                      onSelect: (value) {
-                        setState(() {
-                          _genderForm = value!;
-                          _ageForm = true;
-                        });
-                      },
-                      onSubmit: (value) {
-                        setState(() {
-                          _currentDog.gender = value;
-                        });
-                      },
-                      onBack: (value) {
-                        setState(() {
-                          _nameForm = value!;
-                        });
-                      },
-                      referrer: _currentReferrer,
-                      owner: _currentOwner,
-                    )
-                  : _ageForm
-                      ? AgeForm(
-                          onSelect: (value) {
-                            setState(() {
-                              _ageForm = value!;
-                              _sizeForm = true;
-                            });
-                          },
-                          onSubmit: (value) {
-                            setState(() {
-                              _currentDog.age = value;
-                            });
-                          },
-                          onBack: (value) {
-                            setState(() {
-                              _genderForm = value!;
-                            });
-                          },
-                          referrer: _currentReferrer,
-                          owner: _currentOwner,
-                        )
-                      : _sizeForm
-                          ? SizeForm(
-                              onSelect: (value) {
-                                setState(() {
-                                  _sizeForm = value!;
-                                  _activityForm = true;
-                                });
-                              },
-                              onSubmit: (value) {
-                                setState(() {
-                                  _currentDog.size = value;
-                                });
-                              },
-                              onBack: (value) {
-                                setState(() {
-                                  _ageForm = value!;
-                                });
-                              },
-                              referrer: _currentReferrer,
-                              owner: _currentOwner,
-                            )
-                          : _activityForm
-                              ? ActivityForm(
-                                  onSelect: (value) {
-                                    setState(() {
-                                      _activityForm = value!;
-                                      _imageForm = true;
-                                    });
-                                  },
-                                  onSubmit: (value) {
-                                    setState(() {
-                                      _currentDog.activity = value;
-                                    });
-                                  },
-                                  onBack: (value) {
-                                    setState(() {
-                                      _sizeForm = value!;
-                                    });
-                                  },
-                                  referrer: _currentReferrer,
-                                  owner: _currentOwner,
-                                )
-                              : _imageForm
-                                  ? ImageForm(
-                                      onSelect: (value) {
-                                        setState(() {
-                                          _imageForm = value!;
-                                          _summaryForm = true;
-                                        });
-                                      },
-                                      onSubmit: (value) {
-                                        setState(() {
-                                          _currentDog.photo = value;
-                                        });
-                                      },
-                                      onBack: (value) {
-                                        setState(() {
-                                          _activityForm = value!;
-                                        });
-                                      },
-                                      referrer: _currentReferrer,
-                                      owner: _currentOwner,
-                                    )
-                                  : DogSummary(
-                                      onBack: (value) {
-                                        setState(() {
-                                          _imageForm = value!;
-                                        });
-                                      },
-                                      dog: _currentDog,
-                                      owner: _currentOwner,
-                                      referrer: _currentReferrer,
-                                    )
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            _nameForm
+                ? NameForm(
+                    onSelect: (value) {
+                      setState(() {
+                        _nameForm = value!;
+                        _genderForm = true;
+                      });
+                    },
+                    onSubmit: (value) {
+                      setState(() {
+                        _currentDog.name = value;
+                        print(_currentDog.name);
+                      });
+                    },
+                    referrer: _currentReferrer,
+                    owner: _currentOwner,
+                  )
+                : _genderForm
+                    ? GenderForm(
+                        onSelect: (value) {
+                          setState(() {
+                            _genderForm = value!;
+                            _ageForm = true;
+                          });
+                        },
+                        onSubmit: (value) {
+                          setState(() {
+                            _currentDog.gender = value;
+                          });
+                        },
+                        onBack: (value) {
+                          setState(() {
+                            _nameForm = value!;
+                          });
+                        },
+                        referrer: _currentReferrer,
+                        owner: _currentOwner,
+                      )
+                    : _ageForm
+                        ? AgeForm(
+                            onSelect: (value) {
+                              setState(() {
+                                _ageForm = value!;
+                                _sizeForm = true;
+                              });
+                            },
+                            onSubmit: (value) {
+                              setState(() {
+                                _currentDog.age = value;
+                              });
+                            },
+                            onBack: (value) {
+                              setState(() {
+                                _genderForm = value!;
+                              });
+                            },
+                            referrer: _currentReferrer,
+                            owner: _currentOwner,
+                          )
+                        : _sizeForm
+                            ? SizeForm(
+                                onSelect: (value) {
+                                  setState(() {
+                                    _sizeForm = value!;
+                                    _activityForm = true;
+                                  });
+                                },
+                                onSubmit: (value) {
+                                  setState(() {
+                                    _currentDog.size = value;
+                                  });
+                                },
+                                onBack: (value) {
+                                  setState(() {
+                                    _ageForm = value!;
+                                  });
+                                },
+                                referrer: _currentReferrer,
+                                owner: _currentOwner,
+                              )
+                            : _activityForm
+                                ? ActivityForm(
+                                    onSelect: (value) {
+                                      setState(() {
+                                        _activityForm = value!;
+                                        _imageForm = true;
+                                      });
+                                    },
+                                    onSubmit: (value) {
+                                      setState(() {
+                                        _currentDog.activity = value;
+                                      });
+                                    },
+                                    onBack: (value) {
+                                      setState(() {
+                                        _sizeForm = value!;
+                                      });
+                                    },
+                                    referrer: _currentReferrer,
+                                    owner: _currentOwner,
+                                  )
+                                : _imageForm
+                                    ? ImageForm(
+                                        onSelect: (value) {
+                                          setState(() {
+                                            _imageForm = value!;
+                                            _summaryForm = true;
+                                          });
+                                        },
+                                        onSubmit: (value) {
+                                          setState(() {
+                                            _currentDog.photo = value;
+                                          });
+                                        },
+                                        onBack: (value) {
+                                          setState(() {
+                                            _activityForm = value!;
+                                          });
+                                        },
+                                        referrer: _currentReferrer,
+                                        owner: _currentOwner,
+                                      )
+                                    : DogSummary(
+                                        onBack: (value) {
+                                          setState(() {
+                                            _imageForm = value!;
+                                          });
+                                        },
+                                        dog: _currentDog,
+                                        owner: _currentOwner,
+                                        referrer: _currentReferrer,
+                                      ),
+          ],
+        ),
       ),
     );
   }
