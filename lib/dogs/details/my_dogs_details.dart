@@ -117,7 +117,17 @@ class _MyDogsDetailsState extends State<MyDogsDetails> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //description
-                //Text(_currentDog.description)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      _currentDog.description,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      maxLines: 10,
+                    ),
+                  ),
+                ),
               ],
             ),
           ],

@@ -117,7 +117,12 @@ class _DogDetailsState extends State<DogDetails> {
                                   icon: Icon(Icons.keyboard_arrow_up)),
                           _showDetails
                               ? MyDogsDetails(dog: _currentDog)
-                              : SizedBox(),
+                              : Text(
+                                  _currentDog.name,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -135,10 +140,6 @@ class _DogDetailsState extends State<DogDetails> {
                                   icon: Icon(Icons.arrow_back_ios_new)),
                               Column(
                                 children: [
-                                  Text(
-                                    _currentDog.name,
-                                    style: TextStyle(color: Colors.black),
-                                  ),
                                   IconButton(
                                     iconSize: 50,
                                     //check if _currentDog has liked this buddy or not

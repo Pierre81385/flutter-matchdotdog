@@ -183,7 +183,12 @@ class _AllBuddiesState extends State<AllBuddies> {
                                       icon: Icon(Icons.keyboard_arrow_up)),
                               _showDetails
                                   ? MyDogsDetails(dog: _currentBuddy)
-                                  : Text(_currentBuddy.name),
+                                  : Text(
+                                      _currentBuddy.name,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
