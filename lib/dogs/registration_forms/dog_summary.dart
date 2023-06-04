@@ -227,7 +227,7 @@ class _DogSummaryState extends State<DogSummary> {
                                             referrer: 'dogRegistration')),
                                   );
                                 },
-                                child: Text('Submit')),
+                                child: Text('Look\s good!')),
                       ],
                     ),
                   ],

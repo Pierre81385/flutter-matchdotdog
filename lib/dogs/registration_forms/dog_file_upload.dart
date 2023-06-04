@@ -68,6 +68,7 @@ class _DogImageUploadsState extends State<DogImageUploads> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         SizedBox(

@@ -53,6 +53,7 @@ class _AgeFormState extends State<AgeForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text("How old is your dog?"),
         Text('${_selectedAgeValue.round().toString()} years old.'),

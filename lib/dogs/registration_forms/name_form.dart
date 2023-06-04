@@ -53,6 +53,7 @@ class _NameFormState extends State<NameForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text("What's your dog's name?"),
         Padding(

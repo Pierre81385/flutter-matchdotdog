@@ -54,9 +54,22 @@ class _ActivityFormState extends State<ActivityForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('How big active your dog?'),
-        Text('Activity LVL ${_selectedActivityValue.round().toString()}'),
+        _selectedActivityValue <= 5
+            ? Text('and very laid back.')
+            : _selectedActivityValue > 5 && _selectedActivityValue <= 10
+                ? Text('and curious but chill.')
+                : _selectedActivityValue > 10 && _selectedActivityValue <= 15
+                    ? Text('and playful!')
+                    : _selectedActivityValue > 15 &&
+                            _selectedActivityValue <= 20
+                        ? Text('with puppy energy!')
+                        : _selectedActivityValue > 20 &&
+                                _selectedActivityValue <= 24
+                            ? Text('and hyper-active!')
+                            : Text('and agressively hyper-active!'),
         Slider(
             //label: _selectedAgeValue.toString(),
             min: 0,

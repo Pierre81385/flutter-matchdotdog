@@ -53,6 +53,7 @@ class _GenderFormState extends State<GenderForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text("Is your dog a boy or girl? "),
         Padding(

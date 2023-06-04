@@ -51,7 +51,7 @@ class _MyDogsState extends State<MyDogs> {
           return Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/mydogs.jpeg'),
+                image: AssetImage('assets/images/dogs.png'),
                 fit: BoxFit.cover,
               ),
             ),

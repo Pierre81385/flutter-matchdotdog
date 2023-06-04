@@ -53,6 +53,7 @@ class _SizeFormState extends State<SizeForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('How big is your dog?'),
         _selectedSizeValue <= 5
