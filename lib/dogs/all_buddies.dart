@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:matchdotdog/chat/chat.dart';
 import 'package:matchdotdog/chat/chat_menu_contd.dart';
+import 'package:matchdotdog/dogs/details/my_dogs_details.dart';
 import 'package:matchdotdog/user/home.dart';
 import '../models/dog_model.dart';
 import '../models/owner_model.dart';
@@ -30,6 +31,7 @@ class _AllBuddiesState extends State<AllBuddies> {
   late Stream<DocumentSnapshot<Map<String, dynamic>>> _currentDogStream;
   late int _index;
   late bool _buddyState;
+  bool _showDetails = false;
 
   @override
   void initState() {
@@ -45,6 +47,7 @@ class _AllBuddiesState extends State<AllBuddies> {
         .doc(_currentDog.id)
         .snapshots();
     _buddyState = false;
+    _showDetails = false;
   }
 
   @override
@@ -150,115 +153,140 @@ class _AllBuddiesState extends State<AllBuddies> {
                             //   ),
                             // ],
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
                             children: [
-                              IconButton(
-                                  color: Colors.black,
-                                  onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePage(
-                                                owner: _currentOwner,
-                                                referrer: 'allBuddies',
-                                              )),
-                                    );
-                                  },
-                                  icon: Icon(Icons.arrow_back_ios_new)),
-                              Column(
+                              _showDetails
+                                  ? IconButton(
+                                      color: Colors.black,
+                                      onPressed: () {
+                                        setState(() {
+                                          _showDetails = false;
+                                        });
+                                      },
+                                      icon: Icon(Icons.keyboard_arrow_down))
+                                  : IconButton(
+                                      color: Colors.black,
+                                      onPressed: () {
+                                        setState(() {
+                                          _showDetails = true;
+                                        });
+                                      },
+                                      icon: Icon(Icons.keyboard_arrow_up)),
+                              _showDetails
+                                  ? MyDogsDetails(dog: _currentBuddy)
+                                  : SizedBox(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    _currentBuddy.name,
-                                    style: TextStyle(color: Colors.black),
+                                  IconButton(
+                                      color: Colors.black,
+                                      onPressed: () {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (context) => HomePage(
+                                                    owner: _currentOwner,
+                                                    referrer: 'allBuddies',
+                                                  )),
+                                        );
+                                      },
+                                      icon: Icon(Icons.arrow_back_ios_new)),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        _currentBuddy.name,
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      IconButton(
+                                        iconSize: 50,
+                                        //check if _currentDog has liked this buddy or not
+                                        color: _currentBuddy.buddies
+                                                .contains(_currentDog.id)
+                                            ? Colors.red
+                                            : Colors.black,
+                                        icon: const Icon(Icons.pets_rounded),
+                                        onPressed: () {
+                                          //currently widget.dog.id = THIS DOG not users dog
+                                          if (_currentDog.buddies
+                                              .contains(_currentBuddy.id)) {
+                                            print(
+                                                "removing this buddy from current dog");
+                                            FirebaseFirestore.instance
+                                                .collection("dogs")
+                                                .doc(_currentDog.id)
+                                                .update({
+                                              'buddies': FieldValue.arrayRemove(
+                                                  [_currentBuddy.id])
+                                            });
+                                            setState(() {
+                                              _currentDog.buddies
+                                                  .remove(_currentBuddy.id);
+                                            });
+                                            print(
+                                                'removing current dog from this buddy');
+                                            FirebaseFirestore.instance
+                                                .collection("dogs")
+                                                .doc(_currentBuddy.id)
+                                                .update({
+                                              'buddies': FieldValue.arrayRemove(
+                                                  [_currentDog.id])
+                                            });
+                                            setState(() {
+                                              _currentBuddy.buddies
+                                                  .remove(_currentDog.id);
+                                            });
+                                            print('buddy removed');
+                                          } else {
+                                            print(
+                                                "adding this buddy to current dog");
+                                            FirebaseFirestore.instance
+                                                .collection("dogs")
+                                                .doc(_currentDog.id)
+                                                .update({
+                                              'buddies': FieldValue.arrayUnion(
+                                                  [_currentBuddy.id])
+                                            });
+                                            setState(() {
+                                              _currentDog.buddies
+                                                  .add(_currentBuddy.id);
+                                            });
+                                            print(
+                                                'adding this dog to current buddy');
+                                            FirebaseFirestore.instance
+                                                .collection("dogs")
+                                                .doc(_currentBuddy.id)
+                                                .update({
+                                              'buddies': FieldValue.arrayUnion(
+                                                  [_currentDog.id])
+                                            });
+                                            setState(() {
+                                              _currentBuddy.buddies
+                                                  .remove(_currentDog.id);
+                                            });
+                                            print('buddy added');
+                                            print('current buddies now ' +
+                                                _currentDog.buddies.toString());
+                                          }
+                                        },
+                                      ),
+                                    ],
                                   ),
                                   IconButton(
-                                    iconSize: 50,
-                                    //check if _currentDog has liked this buddy or not
-                                    color: _currentBuddy.buddies
-                                            .contains(_currentDog.id)
-                                        ? Colors.red
-                                        : Colors.black,
-                                    icon: const Icon(Icons.pets_rounded),
-                                    onPressed: () {
-                                      //currently widget.dog.id = THIS DOG not users dog
-                                      if (_currentDog.buddies
-                                          .contains(_currentBuddy.id)) {
-                                        print(
-                                            "removing this buddy from current dog");
-                                        FirebaseFirestore.instance
-                                            .collection("dogs")
-                                            .doc(_currentDog.id)
-                                            .update({
-                                          'buddies': FieldValue.arrayRemove(
-                                              [_currentBuddy.id])
-                                        });
-                                        setState(() {
-                                          _currentDog.buddies
-                                              .remove(_currentBuddy.id);
-                                        });
-                                        print(
-                                            'removing current dog from this buddy');
-                                        FirebaseFirestore.instance
-                                            .collection("dogs")
-                                            .doc(_currentBuddy.id)
-                                            .update({
-                                          'buddies': FieldValue.arrayRemove(
-                                              [_currentDog.id])
-                                        });
-                                        setState(() {
-                                          _currentBuddy.buddies
-                                              .remove(_currentDog.id);
-                                        });
-                                        print('buddy removed');
-                                      } else {
-                                        print(
-                                            "adding this buddy to current dog");
-                                        FirebaseFirestore.instance
-                                            .collection("dogs")
-                                            .doc(_currentDog.id)
-                                            .update({
-                                          'buddies': FieldValue.arrayUnion(
-                                              [_currentBuddy.id])
-                                        });
-                                        setState(() {
-                                          _currentDog.buddies
-                                              .add(_currentBuddy.id);
-                                        });
-                                        print(
-                                            'adding this dog to current buddy');
-                                        FirebaseFirestore.instance
-                                            .collection("dogs")
-                                            .doc(_currentBuddy.id)
-                                            .update({
-                                          'buddies': FieldValue.arrayUnion(
-                                              [_currentDog.id])
-                                        });
-                                        setState(() {
-                                          _currentBuddy.buddies
-                                              .remove(_currentDog.id);
-                                        });
-                                        print('buddy added');
-                                        print('current buddies now ' +
-                                            _currentDog.buddies.toString());
-                                      }
-                                    },
-                                  ),
+                                      color: Colors.black,
+                                      onPressed: () {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (context) => ChatView(
+                                                    owner: _currentOwner,
+                                                    dog: _currentDog,
+                                                    buddy: _currentBuddy,
+                                                    referrer: 'allBuddies',
+                                                  )),
+                                        );
+                                      },
+                                      icon: Icon(Icons.chat)),
                                 ],
                               ),
-                              IconButton(
-                                  color: Colors.black,
-                                  onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) => ChatView(
-                                                owner: _currentOwner,
-                                                dog: _currentDog,
-                                                buddy: _currentBuddy,
-                                                referrer: 'allBuddies',
-                                              )),
-                                    );
-                                  },
-                                  icon: Icon(Icons.chat)),
                             ],
                           ),
                         )
