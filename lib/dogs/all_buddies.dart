@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:matchdotdog/chat/chat.dart';
 import 'package:matchdotdog/chat/chat_menu_contd.dart';
 import 'package:matchdotdog/dogs/details/my_dogs_details.dart';
@@ -32,6 +33,7 @@ class _AllBuddiesState extends State<AllBuddies> {
   late int _index;
   late bool _buddyState;
   bool _showDetails = false;
+  late double _distance;
 
   @override
   void initState() {
@@ -48,6 +50,7 @@ class _AllBuddiesState extends State<AllBuddies> {
         .snapshots();
     _buddyState = false;
     _showDetails = false;
+    _distance = 0;
   }
 
   @override
@@ -66,6 +69,12 @@ class _AllBuddiesState extends State<AllBuddies> {
         }
 
         Dog _currentBuddy = Dog.fromJson(snapshot.data?.docs[_index]);
+
+        _distance = Geolocator.distanceBetween(
+            _currentDog.ownerLat,
+            _currentDog.ownerLong,
+            _currentBuddy.ownerLat,
+            _currentBuddy.ownerLong);
 
         return Scaffold(
           body: SafeArea(
@@ -174,7 +183,7 @@ class _AllBuddiesState extends State<AllBuddies> {
                                       icon: Icon(Icons.keyboard_arrow_up)),
                               _showDetails
                                   ? MyDogsDetails(dog: _currentBuddy)
-                                  : SizedBox(),
+                                  : Text(_currentBuddy.name),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -194,7 +203,8 @@ class _AllBuddiesState extends State<AllBuddies> {
                                   Column(
                                     children: [
                                       Text(
-                                        _currentBuddy.name,
+                                        _distance.roundToDouble().toString() +
+                                            ' miles away',
                                         style: TextStyle(color: Colors.black),
                                       ),
                                       IconButton(
